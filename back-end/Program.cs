@@ -1,7 +1,42 @@
-﻿using back_end.DataModels;
+﻿using System.Text;
+using back_end.DataModels;
+using back_end.Interfaces;
+using back_end.Models;
+using back_end.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// configurazione autenticazione JWT
+var key = builder.Configuration.GetValue<string>("JwtSettings:Key");
+var issuer = builder.Configuration.GetValue<string>("JwtSettings:Issuer");
+var audience = builder.Configuration.GetValue<string>("JwtSettings:Audience");
+
+builder.Services
+    .Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"))
+    .AddAuthentication(opt =>
+    {
+        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(opt =>
+    {
+        opt.RequireHttpsMetadata = false;
+        opt.SaveToken = true;
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = issuer,
+            ValidAudience = audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+        };
+    });
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -11,6 +46,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt
     .UseSqlServer(builder.Configuration.GetConnectionString("SqlConn")));
+
+builder.Services
+    .AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
@@ -23,6 +61,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

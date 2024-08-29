@@ -28,9 +28,15 @@
   <ItemGroup>
     <None Remove="Controllers\" />
     <None Remove="DataModels\" />
+    <None Remove="Models\" />
+    <None Remove="Services\" />
+    <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="DataModels\" />
+    <Folder Include="Models\" />
+    <Folder Include="Services\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 </Project>
