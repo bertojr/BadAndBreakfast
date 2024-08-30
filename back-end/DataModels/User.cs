@@ -26,7 +26,7 @@ namespace back_end.DataModels
 		public string? Cell { get; set; }
 
         [DataType(DataType.Date)]
-		public DateTime DateOfBirth { get; set; }
+		public DateTime? DateOfBirth { get; set; }
 
         public string? Nationally { get; set; }
 

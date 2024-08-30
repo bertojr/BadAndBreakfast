@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
 namespace back_end.DataModels
 {
 	public class Role
@@ -18,6 +20,7 @@ namespace back_end.DataModels
         public string? Description { get; set; }
 
 		// propietà di navigazione
+		[JsonIgnore]
 		public List<User> Users { get; set; } = new List<User>();
     }
 }

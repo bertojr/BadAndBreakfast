@@ -28,6 +28,9 @@ namespace back_end.DataModels
                 .HasMany(u => u.Reviews)
                 .WithOne(r => r.User)
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.Roles)
