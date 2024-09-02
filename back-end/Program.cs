@@ -49,7 +49,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt => opt
 
 builder.Services
     .AddScoped<IAuthService, AuthService>()
-    .AddScoped<IAdditionalService, back_end.Services.AdditionalService>();
+    .AddScoped<IAdditionalService, back_end.Services.AdditionalService>()
+    .AddScoped<IAmenityService, AmenityService>()
+    .AddScoped(typeof(ICrudService<>), typeof(CrudService<>));
 
 var app = builder.Build();
 

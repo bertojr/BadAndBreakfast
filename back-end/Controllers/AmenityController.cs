@@ -1,4 +1,5 @@
-﻿using back_end.Interfaces;
+﻿using back_end.DataModels;
+using back_end.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -6,17 +7,17 @@ namespace back_end.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdditionalServiceController : ControllerBase
+    public class AmenityController : ControllerBase
     {
-        private readonly ICrudService<DataModels.AdditionalService> _crudService;
+        private readonly ICrudService<Amenity> _crudService;
 
-        public AdditionalServiceController(ICrudService<DataModels.AdditionalService> crudService)
+        public AmenityController(ICrudService<Amenity> crudService)
         {
             _crudService = crudService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] DataModels.AdditionalService newService)
+        public async Task<IActionResult> Create([FromBody]  Amenity newAmenity)
         {
             if (!ModelState.IsValid)
             {
@@ -25,8 +26,8 @@ namespace back_end.Controllers
 
             try
             {
-                var createdService = await _crudService.Create(newService);
-                return Ok(createdService);
+                var createdAmenity = await _crudService.Create(newAmenity);
+                return Ok(createdAmenity);
             }
             catch (InvalidOperationException ex)
             {
@@ -39,8 +40,8 @@ namespace back_end.Controllers
         {
             try
             {
-                var services = await _crudService.GetAll();
-                return Ok(services);
+                var amenities = await _crudService.GetAll();
+                return Ok(amenities);
             }
             catch (InvalidOperationException ex)
             {
@@ -49,7 +50,7 @@ namespace back_end.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] DataModels.AdditionalService updateService)
+        public async Task<IActionResult> Edit(int id, [FromBody] Amenity amenityUpdate)
         {
             if (!ModelState.IsValid)
             {
@@ -58,12 +59,12 @@ namespace back_end.Controllers
 
             try
             {
-                var editedService = await _crudService.Edit(id, updateService);
-                return Ok(editedService);
+                var editedAmenity = await _crudService.Edit(id, amenityUpdate);
+                return Ok(editedAmenity);
             }
             catch (KeyNotFoundException)
             {
-                return NotFound(new {message = $"Servizio con ID: {id} non trovato" });
+                return NotFound(new { message = $"Comodità con ID: {id} non trovato" });
             }
             catch (InvalidOperationException ex)
             {
@@ -81,7 +82,7 @@ namespace back_end.Controllers
             }
             catch (KeyNotFoundException)
             {
-                return NotFound(new { message = $"Servizio con ID: {id} non trovato" });
+                return NotFound(new { message = $"Comodità con ID: {id} non trovato" });
             }
             catch (InvalidOperationException ex)
             {
