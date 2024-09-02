@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Text.Json.Serialization;
 using back_end.DataModels;
 using back_end.Interfaces;
 using back_end.Models;
@@ -49,7 +48,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt => opt
     .UseSqlServer(builder.Configuration.GetConnectionString("SqlConn")));
 
 builder.Services
-    .AddScoped<IAuthService, AuthService>();
+    .AddScoped<IAuthService, AuthService>()
+    .AddScoped<IAdditionalService, back_end.Services.AdditionalService>();
 
 var app = builder.Build();
 
