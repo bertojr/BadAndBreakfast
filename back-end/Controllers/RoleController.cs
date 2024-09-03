@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using back_end.DataModels;
+﻿using back_end.DataModels;
 using back_end.Interfaces;
-using back_end.Models;
-using back_end.Services;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace back_end.Controllers
 {
