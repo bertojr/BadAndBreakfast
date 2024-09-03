@@ -56,6 +56,8 @@ builder.Services
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<IBookingService, BookingService>()
     .AddScoped<IUserService, UserService>()
+    .AddScoped<IReviewService, ReviewService>()
+    .AddScoped<IRoomService, RoomService>()
     .AddScoped(typeof(ICrudService<>), typeof(CrudService<>));
 
 var app = builder.Build();
