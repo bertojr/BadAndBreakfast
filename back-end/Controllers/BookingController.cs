@@ -20,7 +20,7 @@ namespace back_end.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] BookingRequest newBooking)
+        public async Task<IActionResult> Create([FromBody] BookingRequest bookingRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -29,8 +29,11 @@ namespace back_end.Controllers
 
             try
             {
-                var createdBooking = await _bookingService.Create(newBooking.Booking,
-                    newBooking.UserId, newBooking.RoomIds, newBooking.ServiceIds);
+                var createdBooking = await _bookingService.Create(
+                    bookingRequest,
+                    bookingRequest.UserID,
+                    bookingRequest.RoomIds,
+                    bookingRequest.ServiceIds);
                 return Ok(createdBooking);
             }
             catch (InvalidOperationException ex)
@@ -54,7 +57,7 @@ namespace back_end.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] BookingRequest updateBooking)
+        public async Task<IActionResult> Edit(int id, [FromBody] BookingUpdateRequest updateRequest)
         {
             if (!ModelState.IsValid)
             {
@@ -63,8 +66,11 @@ namespace back_end.Controllers
 
             try
             {
-                var updatedBooking = await _bookingService.Update(id,
-                    updateBooking.Booking, updateBooking.RoomIds, updateBooking.ServiceIds);
+                var updatedBooking = await _bookingService.Update(
+                    id,
+                    updateRequest,
+                    updateRequest.RoomIds,
+                    updateRequest.ServiceIds);
                 return Ok(updatedBooking);
             }
             catch (KeyNotFoundException)

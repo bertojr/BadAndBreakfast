@@ -48,7 +48,7 @@ namespace back_end.DataModels
         [ForeignKey("UserID")]
 		public User User { get; set; }
 
-        public Payment Payment { get; set; }
+        public Payment? Payment { get; set; }
 
         // propietà di navigazione
         public List<Room> Rooms { get; set; } = new List<Room>();

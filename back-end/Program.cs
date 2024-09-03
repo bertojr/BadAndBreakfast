@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.Json.Serialization;
 using back_end.DataModels;
 using back_end.Interfaces;
 using back_end.Models;
@@ -39,7 +40,11 @@ builder.Services
 
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+       {
+           options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+       });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -49,6 +54,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt => opt
 
 builder.Services
     .AddScoped<IAuthService, AuthService>()
+    .AddScoped<IBookingService, BookingService>()
     .AddScoped(typeof(ICrudService<>), typeof(CrudService<>));
 
 var app = builder.Build();

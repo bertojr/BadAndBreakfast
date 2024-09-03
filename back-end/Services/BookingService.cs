@@ -1,6 +1,7 @@
 ﻿using System;
 using back_end.DataModels;
 using back_end.Interfaces;
+using back_end.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace back_end.Services
@@ -17,23 +18,21 @@ namespace back_end.Services
             _logger = logger;
         }
 
-        public async Task<Booking> Create(Booking newBooking, int userId, List<int> roomIds, List<int> serviceIds)
+        public async Task<Booking> Create(BookingRequest bookingRequest,
+            int userId, List<int> roomIds, List<int> serviceIds)
         {
-            // Avvia una nuova transazione asincrona per garantire che tutte le
-            // operazioni nel blocco try siano eseguite come un'unica unità di lavoro atomica.
-            // Questo significa che, se si verifica un errore durante il
-            // salvataggio delle modifiche al database,
-            // tutte le operazioni verranno annullate (rollback) per mantenere
-            // la coerenza dei dati.
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
+                // recupero l'utente
                 var user = await _dbContext.Users.FindAsync(userId);
                 if(user == null)
                 {
                     throw new ArgumentException($"Utente con ID {userId} non trovato");
                 }
+
+                // recupero le camere
                 var rooms = await _dbContext.Rooms
                     .Where(r => roomIds.Contains(r.RoomID))
                     .ToListAsync();
@@ -41,6 +40,8 @@ namespace back_end.Services
                 {
                     throw new ArgumentException($"Una o più camere non trovate");
                 }
+
+                // recupero i servizi
                 var services = await _dbContext.AdditionalServices
                     .Where(s => serviceIds.Contains(s.ServiceID))
                     .ToListAsync();
@@ -49,13 +50,39 @@ namespace back_end.Services
                     throw new ArgumentException($"Uno o più servizi non trovati");
                 }
 
-                newBooking.User = user;
-                newBooking.Rooms = rooms;
-                newBooking.AdditionalServices = services;
-                newBooking.TotalPrice = rooms.Sum(r => r.Price);
-                newBooking.Status = "Confermata";
-                newBooking.PaymentStatus = "Da pagare";
+                var checkInDate = bookingRequest.CheckInDate;
+                var checkOutDate = bookingRequest.CheckOutDate;
 
+                if(checkOutDate <= checkInDate)
+                {
+                    throw new ArgumentException("La data di check-out deve " +
+                        "essere successiva alla data di check-in");
+                }
+
+                // calcolo di quanti notti è la prenotazione
+                var numberOfNights = (checkOutDate.DayNumber - checkInDate.DayNumber);
+
+                // calcolo il prezzo totale delle camere
+                var totalRoomPrice = rooms.Sum(r => r.Price * numberOfNights);
+                // calcolo il prezzo totale dei servizi aggiuntivi
+                var totalServicePrice = services.Sum(s => s.UnitPrice);
+
+                // totale della prenotazione
+                var totalPrice = totalRoomPrice + totalServicePrice;
+
+                var newBooking = new Booking
+                {
+                    CheckInDate = bookingRequest.CheckInDate,
+                    CheckOutDate = bookingRequest.CheckOutDate,
+                    TotalPrice = totalPrice,
+                    Status = "Confermata",
+                    PaymentStatus = "Da pagare",
+                    NumberOfGuests = bookingRequest.NumberOfGuests,
+                    SpecialRequests = bookingRequest.SpecialRequests,
+                    User = user,
+                    Rooms = rooms,
+                    AdditionalServices = services
+                };
 
                 await _dbContext.Bookings.AddAsync(newBooking);
                 await _dbContext.SaveChangesAsync();
@@ -75,7 +102,8 @@ namespace back_end.Services
             }
         }
 
-        public async Task<Booking> Update(int bookingId, Booking updateBooking, List<int> roomIds, List<int> serviceIds)
+        public async Task<Booking> Update(int bookingId, BookingUpdateRequest updateRequest,
+            List<int> roomIds, List<int> serviceIds)
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
@@ -92,6 +120,7 @@ namespace back_end.Services
                     throw new KeyNotFoundException($"Prenotazione con ID {bookingId} non trovata");
                 }
 
+                // recupero delle camere
                 var rooms = await _dbContext.Rooms
                     .Where(r => roomIds.Contains(r.RoomID))
                     .ToListAsync();
@@ -99,6 +128,8 @@ namespace back_end.Services
                 {
                     throw new ArgumentException($"Una o più camere non trovate");
                 }
+
+                // recupero dei servizi aggiuntivi
                 var services = await _dbContext.AdditionalServices
                     .Where(s => serviceIds.Contains(s.ServiceID))
                     .ToListAsync();
@@ -107,15 +138,35 @@ namespace back_end.Services
                     throw new ArgumentException($"Uno o più servizi non trovati");
                 }
 
+                var checkInDate = updateRequest.CheckInDate;
+                var checkOutDate = updateRequest.CheckOutDate;
+
+                if (checkOutDate <= checkInDate)
+                {
+                    throw new ArgumentException("La data di check-out deve " +
+                        "essere successiva alla data di check-in");
+                }
+
+                // calcolo di quanti notti è la prenotazione
+                var numberOfNights = (checkOutDate.DayNumber - checkInDate.DayNumber);
+
+                // calcolo il prezzo totale delle camere
+                var totalRoomPrice = rooms.Sum(r => r.Price * numberOfNights);
+                // calcolo il prezzo totale dei servizi aggiuntivi
+                var totalServicePrice = services.Sum(s => s.UnitPrice);
+
+                // totale della prenotazione
+                var totalPrice = totalRoomPrice + totalServicePrice;
+
                 existingBooking.AdditionalServices = services;
                 existingBooking.Rooms = rooms;
-                existingBooking.CheckInDate = updateBooking.CheckInDate;
-                existingBooking.CheckOutDate = updateBooking.CheckOutDate;
-                existingBooking.NumberOfGuests = updateBooking.NumberOfGuests;
-                existingBooking.PaymentStatus = updateBooking.PaymentStatus;
-                existingBooking.SpecialRequests = updateBooking.SpecialRequests;
-                existingBooking.Status = updateBooking.Status;
-                existingBooking.TotalPrice = rooms.Sum(r => r.Price);
+                existingBooking.CheckInDate = updateRequest.CheckInDate;
+                existingBooking.CheckOutDate = updateRequest.CheckOutDate;
+                existingBooking.NumberOfGuests = updateRequest.NumberOfGuests;
+                existingBooking.SpecialRequests = updateRequest.SpecialRequests;
+                existingBooking.PaymentStatus = updateRequest.PaymentStatus;
+                existingBooking.Status = updateRequest.Status;
+                existingBooking.TotalPrice = totalPrice;
 
                 _dbContext.Bookings.Update(existingBooking);
                 await _dbContext.SaveChangesAsync();

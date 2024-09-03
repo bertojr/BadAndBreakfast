@@ -77,7 +77,18 @@ namespace back_end.Services
                     throw new KeyNotFoundException($"{typeof(T).Name} con ID: {id} non trovato");
                 }
 
-                _dbContext.Entry(existingEntity).CurrentValues.SetValues(updateEntity);
+                // Recupera le proprietà chiave
+                var keyProperties = _dbContext.Model.FindEntityType(typeof(T)).FindPrimaryKey().Properties;
+
+                // Per ogni proprietà che non è una chiave, copia il valore
+                foreach (var property in _dbContext.Entry(existingEntity).Properties)
+                {
+                    if (!keyProperties.Any(kp => kp.Name == property.Metadata.Name))
+                    {
+                        var newValue = _dbContext.Entry(updateEntity).Property(property.Metadata.Name).CurrentValue;
+                        property.CurrentValue = newValue;
+                    }
+                }
                 await _dbContext.SaveChangesAsync();
 
                 return existingEntity;
