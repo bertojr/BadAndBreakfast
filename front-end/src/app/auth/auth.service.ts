@@ -29,7 +29,9 @@ export class AuthService {
     tap((user) => (this.syncIsLoggedIn = user))
   );
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.restoreUser();
+  }
 
   loginUrl: string = `${environment.apiUrl}/Auth/login`;
   registerUrl: string = `${environment.apiUrl}/Auth/register`;
@@ -50,5 +52,50 @@ export class AuthService {
         localStorage.setItem('accessData', JSON.stringify(data));
       })
     );
+  }
+
+  // metdo per effettuare il logout
+  logout(): void {
+    this.authSubject.next(null);
+    localStorage.removeItem('accessData');
+  }
+
+  // metodo per effettuare l'auto logout alla scadenza del token
+  autoLogout(): void {
+    const accessData = this.getAccessData();
+
+    if (!accessData) return;
+
+    const expDate = this.jwtHelper.getTokenExpirationDate(
+      accessData.token
+    ) as Date;
+
+    const expMs = expDate.getTime() - new Date().getTime();
+
+    setTimeout(() => this.logout(), expMs);
+  }
+
+  // metodo per recuperare i dati di accesso
+  getAccessData(): iAuthResponse | null {
+    const accessDataJson = localStorage.getItem('accessData');
+
+    if (!accessDataJson) return null;
+
+    const accessData: iAuthResponse = JSON.parse(accessDataJson);
+
+    return accessData;
+  }
+
+  restoreUser(): void {
+    const accessData = this.getAccessData();
+
+    // controllo se non c'è un utente loggato
+    if (!accessData) return;
+
+    // controllo se il token è scaduto
+    if (this.jwtHelper.isTokenExpired(accessData.token)) return;
+
+    this.authSubject.next(accessData.user);
+    this.autoLogout();
   }
 }

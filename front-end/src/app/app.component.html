@@ -1,3 +1,11 @@
+<div *ngIf="user">
+  <h2>Benvenuto {{ user.email }}</h2>
+</div>
+
+<div *ngIf="!user">
+  <h2>Utente non loggato</h2>
+</div>
+
 <div class="container">
   <router-outlet></router-outlet>
 </div>
