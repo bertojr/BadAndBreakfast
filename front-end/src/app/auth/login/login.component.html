@@ -17,4 +17,9 @@
   />
 
   <button (click)="login()" class="btn btn-primary mt-3">Accedi</button>
+
+  <!-- Mostra il messaggio di errore se esiste -->
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
 </form>

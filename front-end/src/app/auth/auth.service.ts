@@ -31,8 +31,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  loginUrl: string = `${environment.apiUrl}/auth/login`;
-  registerUrl: string = `${environment.apiUrl}/auth/register`;
+  loginUrl: string = `${environment.apiUrl}/Auth/login`;
+  registerUrl: string = `${environment.apiUrl}/Auth/register`;
 
   // metodo per effettuare la registrazione
   register(newUser: Partial<iUser>): Observable<iAuthResponse> {
