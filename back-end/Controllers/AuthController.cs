@@ -23,7 +23,7 @@ namespace back_end.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new {message = "Errore nella registrazione"});
             }
 
             var authResult = await _authService.Login(model.email, model.password);
@@ -49,6 +49,12 @@ namespace back_end.Controllers
         public async Task<IActionResult> Register([FromBody] LoginModel model)
         {
             var (user, errorMessage) = await _authService.Register(model);
+
+            if (!ModelState.IsValid)
+            {
+
+                return BadRequest();
+            }
 
             if(user == null)
             {

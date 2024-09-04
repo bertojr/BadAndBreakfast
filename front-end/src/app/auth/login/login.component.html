@@ -1,25 +1,41 @@
 <h1>Login</h1>
 
-<form>
-  <input
-    type="email"
-    name="email"
-    [(ngModel)]="authData.email"
-    placeholder="email"
-    class="form-control"
-  />
-  <input
-    type="password"
-    name="password"
-    [(ngModel)]="authData.password"
-    placeholder="password"
-    class="form-control mt-3"
-  />
+<form #form="ngForm" (ngSubmit)="login(form)">
+  <div class="form-group">
+    <input
+      type="email"
+      name="email"
+      [(ngModel)]="authData.email"
+      #email="ngModel"
+      placeholder="Inserire email"
+      class="form-control"
+      required
+    />
+    <div *ngIf="email.invalid && email.touched" class="text-danger">
+      Email è obbligatoria e deve essere un'email valida.
+    </div>
+  </div>
 
-  <button (click)="login()" class="btn btn-primary mt-3">Accedi</button>
+  <div class="form-group mt-3">
+    <input
+      type="password"
+      name="password"
+      [(ngModel)]="authData.password"
+      #password="ngModel"
+      placeholder="password"
+      class="form-control"
+      required
+    />
+    <div *ngIf="password.invalid && password.touched" class="text-danger">
+      Password è obbligatoria.
+    </div>
+  </div>
 
-  <!-- Mostra il messaggio di errore se esiste -->
   <div *ngIf="errorMessage" class="alert alert-danger mt-3">
     {{ errorMessage }}
   </div>
+
+  <button type="submit" class="btn btn-primary mt-3" [disabled]="form.invalid">
+    Accedi
+  </button>
 </form>

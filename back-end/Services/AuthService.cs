@@ -126,7 +126,6 @@ namespace back_end.Services
                 return (null, "Email già in uso");
             }
 
-
             try
             {
                 // creo l'hash e il salt della password
