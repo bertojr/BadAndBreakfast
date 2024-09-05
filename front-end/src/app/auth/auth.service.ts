@@ -45,35 +45,12 @@ export class AuthService {
 
   // metodo per effettuare la registrazione
   register(newUser: Partial<iUser>): Observable<iAuthResponse> {
-    return this.http.post<iAuthResponse>(this.registerUrl, newUser).pipe(
-      catchError((error) => {
-        // Gestisci errori specifici della registrazione
-        let errorMessage = 'Registrazione fallita.';
-
-        if (error.error.errors) {
-          // Combina i messaggi di errore in una singola stringa
-          errorMessage = Object.values(error.error.errors).flat().join(' ');
-        } else if (error.error.message) {
-          errorMessage = error.error.message;
-        }
-
-        return throwError(() => new Error(errorMessage));
-      })
-    );
+    return this.http.post<iAuthResponse>(this.registerUrl, newUser);
   }
 
   // metodo che effettua la chiamata per effettuare il login
   login(authData: iAuthData): Observable<iAuthResponse> {
     return this.http.post<iAuthResponse>(this.loginUrl, authData).pipe(
-      catchError((error) => {
-        let errorMessage = 'Login fallito.';
-
-        if (error.error.message) {
-          errorMessage = error.error.message;
-        }
-
-        return throwError(() => new Error(errorMessage));
-      }),
       tap((data) => {
         // quando l'utente è loggato comunico i suoi dati al subject
         this.authSubject.next(data.user);

@@ -1,15 +1,14 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace back_end.Models
 {
 	public class LoginModel
 	{
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Email obbligatoria")]
+        [EmailAddress(ErrorMessage = "Email non valida")]
         public string email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Password obbligatoria")]
         public string password { get; set; }
     }
 }

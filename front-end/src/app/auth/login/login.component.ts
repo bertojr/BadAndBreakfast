@@ -20,18 +20,14 @@ export class LoginComponent {
   constructor(private authSvc: AuthService) {}
 
   login(form: NgForm) {
-    this.authSvc
-      .login(this.authData)
-      .pipe(
-        catchError((error) => {
-          alert(error.error.message);
-          return of(null);
-        })
-      )
-      .subscribe((response) => {
-        if (response) {
-          this.errorMessage = null;
-        }
-      });
+    this.authSvc.login(this.authData).subscribe({
+      next: () => {
+        this.errorMessage = null;
+      },
+      error: (error) => {
+        this.errorMessage =
+          error.message || 'Si è verificato un errore durante il login';
+      },
+    });
   }
 }

@@ -17,22 +17,18 @@ export class RegisterComponent {
 
   register(form: NgForm) {
     if (form.invalid) {
+      this.errorMessage = 'Per favore correggi gli errori nel modulo';
       return;
     }
 
-    this.authSvc
-      .register(this.newUser)
-      .pipe(
-        catchError((error) => {
-          this.errorMessage = error.message;
-          return of(null);
-        })
-      )
-      .subscribe((response) => {
-        if (response) {
-          this.errorMessage = null;
-          alert('Registrazione avvenuta con successo');
-        }
-      });
+    this.authSvc.register(this.newUser).subscribe({
+      next: () => {
+        this.errorMessage = null;
+      },
+      error: (error) => {
+        this.errorMessage =
+          error.message || 'Si è verificato un errore durante la registrazione';
+      },
+    });
   }
 }
