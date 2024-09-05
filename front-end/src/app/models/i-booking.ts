@@ -1,7 +1,7 @@
 import { iAdditionalService } from './i-additional-service';
 import { iUser } from './i-user';
 
-export interface IBooking {
+export interface iBooking {
   /*
   id: number;
   checkInDate: string;

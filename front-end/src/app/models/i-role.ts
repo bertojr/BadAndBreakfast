@@ -1,2 +1,4 @@
-export interface IRole {
+export interface iRole {
+  id: number;
+  name: string;
 }

@@ -1,2 +1,1 @@
-export interface IReview {
-}
+export interface iReview {}
