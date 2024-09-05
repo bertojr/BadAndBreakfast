@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
 namespace back_end.DataModels
 {
 	public class Amenity
@@ -18,6 +20,7 @@ namespace back_end.DataModels
         public string? Description { get; set; }
 
         // propietà di navigazione
+        [JsonIgnore]
         public List<Room> Rooms { get; set; } = new List<Room>();
     }
 }

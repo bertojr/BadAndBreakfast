@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
 namespace back_end.DataModels
 {
 	public class Payment
@@ -44,7 +46,8 @@ namespace back_end.DataModels
         public DateTime UpdateDate { get; set; }
 
         [ForeignKey("BookingID")]
-		public Booking Booking { get; set; }
+        [JsonIgnore]
+        public Booking Booking { get; set; }
     }
 }
 

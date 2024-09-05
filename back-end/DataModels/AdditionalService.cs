@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
 namespace back_end.DataModels
 {
 	public class AdditionalService
@@ -23,6 +25,7 @@ namespace back_end.DataModels
         public decimal UnitPrice { get; set; }
 
         // propietà di navigazione
+        [JsonIgnore]
         public List<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }

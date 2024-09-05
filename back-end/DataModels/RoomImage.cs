@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
 namespace back_end.DataModels
 {
 	public class RoomImage
@@ -15,7 +17,8 @@ namespace back_end.DataModels
 		public string? AltText { get; set; }
 
 		[ForeignKey("RoomID")]
-		public Room Room { get; set; }
+        [JsonIgnore]
+        public Room Room { get; set; }
     }
 }
 

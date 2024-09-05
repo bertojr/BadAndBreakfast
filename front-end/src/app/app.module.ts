@@ -9,11 +9,11 @@ import {
 } from '@angular/common/http';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { HttpErrorInterceptor } from './interceptor/http-error.interceptor';
-import { UserListComponent } from './userManagement/user-list/user-list.component';
 import { AdminModule } from './admin/admin.module';
+import { HomePageComponent } from './pages/home-page/home-page.component';
 
 @NgModule({
-  declarations: [AppComponent, UserListComponent],
+  declarations: [AppComponent, HomePageComponent],
   imports: [BrowserModule, AppRoutingModule, AdminModule],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
