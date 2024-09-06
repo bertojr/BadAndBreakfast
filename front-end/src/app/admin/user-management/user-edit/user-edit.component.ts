@@ -3,7 +3,12 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { iUser } from '../../../models/i-user';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  RequiredValidator,
+  Validators,
+} from '@angular/forms';
 import { AuthService } from '../../../auth/auth.service';
 import { RoleService } from '../../../services/role.service';
 import { iRole } from '../../../models/i-role';
@@ -71,7 +76,7 @@ export class UserEditComponent {
       dateOfBirth: this.fb.control(null),
       nationally: this.fb.control(null),
       gender: this.fb.control(''),
-      password: this.fb.control(null),
+      password: this.fb.control(null, Validators.required),
       passwordHash: this.fb.control(null),
       passwordSalt: this.fb.control(null),
       country: this.fb.control(null),
@@ -82,13 +87,17 @@ export class UserEditComponent {
   }
 
   private populateForm(user: iUser): void {
+    const formattedDateOfBirth = user.dateOfBirth
+      ? user.dateOfBirth.split('T')[0]
+      : null;
     this.userForm.patchValue({
       name: user.name || null,
       email: user.email || null,
       cell: user.cell || null,
-      dateOfBirth: user.dateOfBirth || null,
+      dateOfBirth: formattedDateOfBirth || null,
       nationally: user.nationally || null,
       gender: user.gender || '',
+      password: 'non serve a niente',
       passwordHash: user.passwordHash || null,
       passwordSalt: user.passwordSalt || null,
       country: user.country || null,

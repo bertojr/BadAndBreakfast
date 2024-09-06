@@ -159,32 +159,34 @@
   <a routerLink="../" class="btn btn-secondary">Annulla</a>
 </form>
 
-<div *ngIf="user" class="form-group mb-3">
-  <label for="roles">Ruoli</label>
-  <select id="roles" class="form-control" [(ngModel)]="selectedRoleId">
-    <option [ngValue]="null">-- Seleziona un ruolo --</option>
-    <option *ngFor="let role of roles" [value]="role.roleID">
-      {{ role.name }}
-    </option>
-  </select>
-  <button type="button" class="btn btn-primary mt-2" (click)="addRole()">
-    Aggiungi Ruolo
-  </button>
-</div>
+<div *ngIf="user">
+  <div class="form-group mb-3">
+    <label for="roles">Ruoli</label>
+    <select id="roles" class="form-control" [(ngModel)]="selectedRoleId">
+      <option [ngValue]="null">-- Seleziona un ruolo --</option>
+      <option *ngFor="let role of roles" [value]="role.roleID">
+        {{ role.name }}
+      </option>
+    </select>
+    <button type="button" class="btn btn-primary mt-2" (click)="addRole()">
+      Aggiungi Ruolo
+    </button>
+  </div>
 
-<div *ngIf="user" class="form-group mb-3">
-  <label for="selectedRoles">Ruoli</label>
-  <ul id="selectedRoles">
-    <li *ngFor="let role of user.roles">
-      {{ role.name }}
-      <button
-        class="btn btn-danger"
-        (click)="removeRoleFromUser(user.userID, role.roleID)"
-      >
-        Rimuovi
-      </button>
-    </li>
-  </ul>
+  <div class="form-group mb-3">
+    <label for="selectedRoles">Ruoli</label>
+    <ul id="selectedRoles">
+      <li *ngFor="let role of user.roles">
+        {{ role.name }}
+        <button
+          class="btn btn-danger"
+          (click)="removeRoleFromUser(user.userID, role.roleID)"
+        >
+          Rimuovi
+        </button>
+      </li>
+    </ul>
+  </div>
 </div>
 
 <!-- Visualizzazione errori -->
