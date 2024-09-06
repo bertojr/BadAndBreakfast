@@ -119,9 +119,9 @@ namespace back_end.Services
             }
         }
 
-        public async Task<(User user, string errorMessage)> Register(LoginModel model)
+        public async Task<(User user, string errorMessage)> Register(RegisterModel model)
         {
-            if(await _dbContext.Users.AnyAsync(u => u.Email == model.email))
+            if(await _dbContext.Users.AnyAsync(u => u.Email == model.Email))
             {
                 return (null, "Email già in uso");
             }
@@ -129,13 +129,22 @@ namespace back_end.Services
             try
             {
                 // creo l'hash e il salt della password
-                var (hash, salt) = HashPassword(model.password);
+                var (hash, salt) = HashPassword(model.Password);
 
                 var newUser = new User
                 {
-                    Email = model.email,
+                    Name = model.Name,
+                    Email = model.Email,
                     PasswordHash = hash,
-                    PasswordSalt = salt
+                    PasswordSalt = salt,
+                    Cell = model.Cell,
+                    DateOfBirth = model.DateOfBirth,
+                    Nationally = model.Nationally,
+                    Gender = model.Gender,
+                    Country = model.Country,
+                    Address = model.Address,
+                    City = model.City,
+                    CAP = model.CAP       
                 };
 
                 await _dbContext.Users.AddAsync(newUser);

@@ -46,7 +46,7 @@ namespace back_end.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] LoginModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +57,7 @@ namespace back_end.Controllers
 
             if(user == null)
             {
-                _logger.LogWarning($"Registrazione fallita per {model.email}: {errorMessage}");
+                _logger.LogWarning($"Registrazione fallita per {model.Email}: {errorMessage}");
                 return BadRequest(new { message = errorMessage });
             }
             return Ok(new {message = "Registrazione avvenuta con successo"});

@@ -6,6 +6,8 @@ namespace back_end.Interfaces
 	{
         public Task<List<User>> GetAll();
         public Task AddRoleToUser(int userId, int roleId);
+        public Task<User> GetById(int id);
+        //public Task<User> Update(int id, User updateUser);
     }
 }
 

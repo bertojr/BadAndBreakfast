@@ -1,5 +1,4 @@
-﻿using System;
-using back_end.DataModels;
+﻿using back_end.DataModels;
 using back_end.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +30,29 @@ namespace back_end.Services
             {
                 _logger.LogError(ex, $"Errore durante il recupero di tutti gli utenti");
                 throw new InvalidOperationException($"Non è stato possibile recuperare gli utenti, riprovare più tardi.", ex);
+            }
+        }
+
+        public async Task<User> GetById(int id)
+        {
+            try
+            {
+                var user = await _dbContext.Users
+                    .Include(u => u.Roles)
+                    .Include(u => u.Reviews)
+                    .Include(u => u.Bookings)
+                    .FirstOrDefaultAsync(u => u.UserID == id);
+                if(user == null)
+                {
+                    throw new KeyNotFoundException($"Utente con ID {id} non trovato.");
+                }
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Errore durante il recupero dell'utente con ID {id}");
+                throw new InvalidOperationException($"Non è stato possibile recuperare l'utente, riprovare più tardi.", ex);
             }
         }
 
@@ -73,6 +95,47 @@ namespace back_end.Services
                 throw;
             }
         }
+
+        /*
+        public async Task<(User user, string errorMessage)> Update(int id, User updateUser)
+        {
+            if (await _dbContext.Users.AnyAsync(u => u.Email == updateUser.Email))
+            {
+                return (null, "Email già in uso");
+            }
+
+            try
+            {
+                var existingUser = await _dbContext.Users
+                    .Include(u => u.Roles)
+                    .FirstOrDefaultAsync(r => r.UserID == id);
+
+                if(existingUser == null){
+                    throw new KeyNotFoundException($"Utente con ID {id} non trovato");
+                }
+
+                existingUser.Name = updateUser.Name;
+                existingUser.Email = updateUser.Email;
+                existingUser.Cell = updateUser.Cell;
+                existingUser.DateOfBirth = updateUser.DateOfBirth;
+                existingUser.Nationally = updateUser.Nationally;
+                existingUser.Gender = updateUser.Gender;
+                existingUser.Country = existingUser.Country;
+                existingUser.Address = updateUser.Address;
+                existingUser.City = updateUser.City;
+                existingUser.CAP = updateUser.CAP;
+
+                _dbContext.Users.Update(existingUser);
+                await _dbContext.SaveChangesAsync();
+
+                return (existingUser, null);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Errore durante la registrazione dell'utente");
+                return (null, "Errore durante la registrazione dell'utente");
+            }
+        }*/
     }
 }
 

@@ -7,7 +7,7 @@ namespace back_end.Interfaces
 	public interface IAuthService
 	{
 		public Task<AuthResult> Login(string email, string password);
-		public Task<(User user, string errorMessage)> Register(LoginModel model);
+		public Task<(User user, string errorMessage)> Register(RegisterModel model);
 	}
 }
 
