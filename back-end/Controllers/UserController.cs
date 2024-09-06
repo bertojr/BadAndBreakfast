@@ -95,6 +95,11 @@ namespace back_end.Controllers
             {
                 return StatusCode(500, new { message = ex.Message });
             }
+            catch (Exception)
+            {
+                // Altre eccezzioni non previste
+                return StatusCode(500, new { message = "Errore imprevisto." });
+            }
         }
 
 

@@ -46,7 +46,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               break;
             }
             case 404: {
-              errorMessage = 'Risorsa non trovata';
+              errorMessage = error.error?.message || 'Risorsa non trovata';
               break;
             }
             case 500: {

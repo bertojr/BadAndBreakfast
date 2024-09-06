@@ -4,20 +4,11 @@ import { CommonModule } from '@angular/common';
 import { UserManagementRoutingModule } from './user-management-routing.module';
 import { UserManagementComponent } from './user-management.component';
 import { UserListComponent } from './user-list/user-list.component';
-import { UserDetailComponent } from './user-detail/user-detail.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
-
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    UserManagementComponent,
-    UserListComponent,
-    UserDetailComponent,
-    UserEditComponent
-  ],
-  imports: [
-    CommonModule,
-    UserManagementRoutingModule
-  ]
+  declarations: [UserManagementComponent, UserListComponent, UserEditComponent],
+  imports: [CommonModule, UserManagementRoutingModule, ReactiveFormsModule],
 })
-export class UserManagementModule { }
+export class UserManagementModule {}

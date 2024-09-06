@@ -27,18 +27,6 @@ export class UserListComponent {
     });
   }
 
-  viewDetails(id: number): void {
-    this.userSvc.getById(id).subscribe({
-      next: () => {
-        this.errorMessage = null;
-      },
-      error: (error) => {
-        this.errorMessage =
-          error.message || 'Si è verificato un errore durante la eliminazione';
-      },
-    });
-  }
-  editUser(id: number): void {}
   deleteUser(id: number): void {
     this.userSvc.delete(id).subscribe({
       next: () => {

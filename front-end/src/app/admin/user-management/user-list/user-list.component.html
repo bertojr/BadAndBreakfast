@@ -23,10 +23,9 @@
         </td>
         <td>
           <div class="btn-group" role="group" aria-label="Azioni">
-            <button class="btn btn-primary btn-sm" [routerLink]="[user.userID]">
-              Dettagli
+            <button class="btn btn-warning btn-sm" [routerLink]="[user.userID]">
+              Modifica
             </button>
-            <button class="btn btn-warning btn-sm">Modifica</button>
             <button
               class="btn btn-danger btn-sm"
               (click)="deleteUser(user.userID)"

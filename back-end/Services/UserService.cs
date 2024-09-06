@@ -52,7 +52,7 @@ namespace back_end.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Errore durante il recupero dell'utente con ID {id}");
-                throw new InvalidOperationException($"Non è stato possibile recuperare l'utente, riprovare più tardi.", ex);
+                throw;
             }
         }
 
