@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using back_end.DataModels;
+﻿using back_end.DataModels;
 using back_end.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,8 +38,30 @@ namespace back_end.Controllers
         {
             try
             {
-                await _userService.AddRoleToUser(userId, roleId);
-                return Ok(new { message = "Ruolo aggiunto con successo." });
+                var role = await _userService.AddRoleToUser(userId, roleId);
+                return Ok(role);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Errore interno del server.", details = ex.Message });
+            }
+        }
+
+        [HttpDelete("{userId}/role/{roleId}")]
+        public async Task<IActionResult> RemoveRoleFromUser(int userId, int roleId)
+        {
+            try
+            {
+                await _userService.RemoveRoleFromUser(userId, roleId);
+                return Ok(new { message = "Ruolo rimosso con successo." });
             }
             catch (KeyNotFoundException ex)
             {

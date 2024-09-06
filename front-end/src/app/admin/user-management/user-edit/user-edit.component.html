@@ -136,12 +136,56 @@
     />
   </div>
 
+  <!-- CAMPI NASCOSTI -->
+  <input
+    id="passwordHash"
+    type="text"
+    class="d-none"
+    formControlName="passwordHash"
+  />
+
+  <input
+    id="passwordSalt"
+    type="text"
+    class="d-none"
+    formControlName="passwordSalt"
+  />
+  <!-- CAMPI NASCOSTI -->
+
   <button type="submit" class="btn btn-primary" [disabled]="!userForm.valid">
     {{ user ? "Salva Modifiche" : "Crea Utente" }}
   </button>
 
   <a routerLink="../" class="btn btn-secondary">Annulla</a>
 </form>
+
+<div *ngIf="user" class="form-group mb-3">
+  <label for="roles">Ruoli</label>
+  <select id="roles" class="form-control" [(ngModel)]="selectedRoleId">
+    <option [ngValue]="null">-- Seleziona un ruolo --</option>
+    <option *ngFor="let role of roles" [value]="role.roleID">
+      {{ role.name }}
+    </option>
+  </select>
+  <button type="button" class="btn btn-primary mt-2" (click)="addRole()">
+    Aggiungi Ruolo
+  </button>
+</div>
+
+<div *ngIf="user" class="form-group mb-3">
+  <label for="selectedRoles">Ruoli</label>
+  <ul id="selectedRoles">
+    <li *ngFor="let role of user.roles">
+      {{ role.name }}
+      <button
+        class="btn btn-danger"
+        (click)="removeRoleFromUser(user.userID, role.roleID)"
+      >
+        Rimuovi
+      </button>
+    </li>
+  </ul>
+</div>
 
 <!-- Visualizzazione errori -->
 <div *ngIf="errorMessage" class="alert alert-danger mt-3">

@@ -15,6 +15,9 @@ export class CrudService<T> {
   setEndpoint(endpoint: string): void {
     this.apiUrl = `${this.baseApiUrl}/${endpoint}`;
   }
+  getUrl(): string {
+    return this.apiUrl;
+  }
 
   // recupera tutta l'entità
   getAll(): Observable<T[]> {

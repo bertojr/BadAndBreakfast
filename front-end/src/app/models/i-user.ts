@@ -11,6 +11,8 @@ export interface iUser {
   nationally?: string;
   gender?: string;
   password: string;
+  passwordHash: string;
+  passwordSalt: string;
   country?: string;
   address?: string;
   city?: string;

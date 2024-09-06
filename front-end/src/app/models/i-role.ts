@@ -1,4 +1,5 @@
 export interface iRole {
-  id: number;
+  roleID: number;
   name: string;
+  description?: string;
 }

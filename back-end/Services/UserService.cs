@@ -56,7 +56,7 @@ namespace back_end.Services
             }
         }
 
-        public async Task AddRoleToUser(int userId, int roleId)
+        public async Task<Role> AddRoleToUser(int userId, int roleId)
         {
             try
             {
@@ -77,12 +77,53 @@ namespace back_end.Services
                     throw new KeyNotFoundException($"Ruolo con ID {roleId} non trovato.");
                 }
 
-                if (!user.Roles.Contains(role))
+                if (user.Roles.Any(r => r.RoleID == roleId))
                 {
-                    user.Roles.Add(role);
-                    _dbContext.Users.Update(user);
-                    await _dbContext.SaveChangesAsync();
+                    throw new InvalidOperationException($"Utente già con ruolo {role.Name}");
                 }
+
+                user.Roles.Add(role);
+                _dbContext.Users.Update(user);
+                await _dbContext.SaveChangesAsync();
+
+                return role;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                _logger.LogError(dbEx, $"Errore durante l'aggiornamento dell'utente con ID {userId}.");
+                throw new InvalidOperationException($"Errore durante l'aggiornamento dell'utente, riprovare più tardi.", dbEx);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Errore generico durante l'aggiunta del ruolo all'utente con ID {userId}.");
+                throw;
+            }
+        }
+
+        public async Task RemoveRoleFromUser(int userId, int roleId)
+        {
+            try
+            {
+                var user = await _dbContext.Users
+                    .Include(u => u.Roles)
+                    .FirstOrDefaultAsync(u => u.UserID == userId);
+
+                if (user == null)
+                {
+                    throw new KeyNotFoundException($"Utente con ID {userId} non trovato.");
+                }
+
+                var role = await _dbContext.Roles
+                    .FirstOrDefaultAsync(r => r.RoleID == roleId);
+
+                if (role == null)
+                {
+                    throw new KeyNotFoundException($"Ruolo con ID {roleId} non trovato.");
+                }
+
+                user.Roles.Remove(role);
+                _dbContext.Users.Update(user);
+                await _dbContext.SaveChangesAsync();
             }
             catch (DbUpdateException dbEx)
             {
