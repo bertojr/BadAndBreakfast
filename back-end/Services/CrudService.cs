@@ -122,6 +122,26 @@ namespace back_end.Services
                 throw new InvalidOperationException($"Non è stato possibile recuperare le {typeof(T).Name}, riprovare più tardi.", ex);
             }
         }
+
+        public async Task<T> GetById(int id)
+        {
+            try
+            {
+                var entity = await _dbContext.Set<T>().FindAsync(id);
+
+                if(entity == null)
+                {
+                    throw new KeyNotFoundException($"{typeof(T).Name} con ID {id} non trovata");
+                }
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Errore durante il recupero di tutte le {typeof(T).Name}");
+                throw new InvalidOperationException($"Non è stato possibile recuperare le {typeof(T).Name}, riprovare più tardi.", ex);
+            }
+        }
     }
 }
 

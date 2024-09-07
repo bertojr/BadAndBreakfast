@@ -1,1 +1,39 @@
-<p>amenity-edit works!</p>
+<h1 class="mb-4">
+  {{ isEditMode ? "Modifica comodità" : "Crea Nuova comodità" }}
+</h1>
+
+<form #form="ngForm" (ngSubmit)="onSubmit(form)">
+  <div class="form-group">
+    <input
+      type="text"
+      name="name"
+      [(ngModel)]="amenity.name"
+      #name="ngModel"
+      placeholder="Nome"
+      class="form-control"
+      required
+    />
+    <div *ngIf="name.invalid && name.touched" class="text-danger">
+      Nome obbligatorio
+    </div>
+  </div>
+
+  <div class="form-group mt-3">
+    <textarea
+      class="form-control"
+      #description="ngModel"
+      name="description"
+      [(ngModel)]="amenity.description"
+      placeholder="Descrizione"
+    ></textarea>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <button type="submit" class="btn btn-primary mt-3" [disabled]="form.invalid">
+    {{ isEditMode ? "Modifica comodità" : "Aggiungi comodità" }}
+  </button>
+  <a routerLink="../" class="btn btn-secondary">Annulla</a>
+</form>

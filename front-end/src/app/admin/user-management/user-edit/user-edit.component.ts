@@ -3,12 +3,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { iUser } from '../../../models/i-user';
-import {
-  FormBuilder,
-  FormGroup,
-  RequiredValidator,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../auth/auth.service';
 import { RoleService } from '../../../services/role.service';
 import { iRole } from '../../../models/i-role';

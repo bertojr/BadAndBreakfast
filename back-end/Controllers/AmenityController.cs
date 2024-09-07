@@ -72,6 +72,24 @@ namespace back_end.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var amenity = await _crudService.GetById(id);
+                return Ok(amenity);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { message = $"Comodità con ID: {id} non trovata" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

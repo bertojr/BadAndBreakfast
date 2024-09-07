@@ -18,8 +18,20 @@ const routes: Routes = [
         (m) => m.RoomManagementModule
       ),
   },
-  { path: 'amenity', loadChildren: () => import('./amenity-management/amenity-management.module').then(m => m.AmenityManagementModule) },
-  { path: 'additional-service', loadChildren: () => import('./additional-service-management/additional-service-management.module').then(m => m.AdditionalServiceManagementModule) },
+  {
+    path: 'amenity',
+    loadChildren: () =>
+      import('./amenity-management/amenity-management.module').then(
+        (m) => m.AmenityManagementModule
+      ),
+  },
+  {
+    path: 'additional-service',
+    loadChildren: () =>
+      import(
+        './additional-service-management/additional-service-management.module'
+      ).then((m) => m.AdditionalServiceManagementModule),
+  },
 ];
 
 @NgModule({

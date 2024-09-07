@@ -1,8 +1,6 @@
 export interface iAdditionalService {
-  /*
-  id: number;
+  serviceID: number;
   name: string;
   description?: string;
   unitPrice: number;
-  bookings?: iBooking[]; */
 }

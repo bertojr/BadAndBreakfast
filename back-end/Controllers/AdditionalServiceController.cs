@@ -48,6 +48,8 @@ namespace back_end.Controllers
             }
         }
 
+
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] DataModels.AdditionalService updateService)
         {
@@ -64,6 +66,24 @@ namespace back_end.Controllers
             catch (KeyNotFoundException)
             {
                 return NotFound(new {message = $"Servizio con ID: {id} non trovato" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var service = await _crudService.GetById(id);
+                return Ok(service);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { message = $"Servizio con ID: {id} non trovato" });
             }
             catch (InvalidOperationException ex)
             {

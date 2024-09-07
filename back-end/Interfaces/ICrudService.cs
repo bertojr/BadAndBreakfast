@@ -6,6 +6,7 @@
         public Task<List<T>> GetAll();
         public Task<T> Edit(int id, T updateEntity);
         public Task Delete(int id);
+        public Task<T> GetById(int id);
     }
 }
 
