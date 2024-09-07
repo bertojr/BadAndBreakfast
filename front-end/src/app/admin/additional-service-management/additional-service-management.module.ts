@@ -5,17 +5,18 @@ import { AdditionalServiceManagementRoutingModule } from './additional-service-m
 import { AdditionalServiceManagementComponent } from './additional-service-management.component';
 import { AdditionalServiceListComponent } from './additional-service-list/additional-service-list.component';
 import { AdditionalServiceEditComponent } from './additional-service-edit/additional-service-edit.component';
-
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AdditionalServiceManagementComponent,
     AdditionalServiceListComponent,
-    AdditionalServiceEditComponent
+    AdditionalServiceEditComponent,
   ],
   imports: [
     CommonModule,
-    AdditionalServiceManagementRoutingModule
-  ]
+    AdditionalServiceManagementRoutingModule,
+    FormsModule,
+  ],
 })
-export class AdditionalServiceManagementModule { }
+export class AdditionalServiceManagementModule {}

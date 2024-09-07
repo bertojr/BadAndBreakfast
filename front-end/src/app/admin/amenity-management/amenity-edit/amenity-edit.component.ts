@@ -78,7 +78,4 @@ export class AmenityEditComponent {
       }
     }
   }
-  newAmenity(newAmenity: any) {
-    throw new Error('Method not implemented.');
-  }
 }
