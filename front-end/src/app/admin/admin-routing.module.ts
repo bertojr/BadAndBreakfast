@@ -32,6 +32,7 @@ const routes: Routes = [
         './additional-service-management/additional-service-management.module'
       ).then((m) => m.AdditionalServiceManagementModule),
   },
+  { path: 'role', loadChildren: () => import('./role-management/role-management.module').then(m => m.RoleManagementModule) },
 ];
 
 @NgModule({
