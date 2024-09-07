@@ -70,7 +70,110 @@ namespace back_end.Services
             }
         }
 
-        public async Task<Room> Update(int id, Room updateRoom, List<int> amenitiesIds)
+        public async Task<Room> GetById(int id)
+        {
+            try
+            {
+                var room = await _dbContext.Rooms
+                    .Include(r => r.RoomImages)
+                    .Include(r => r.Amenities)
+                    .FirstOrDefaultAsync(r => r.RoomID == id);
+                if (room == null)
+                {
+                    throw new KeyNotFoundException($"Camera con ID {id} non trovata.");
+                }
+
+                return room;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Errore durante il recupero della camera con ID {id}");
+                throw;
+            }
+        }
+
+        public async Task<Room> AddAmenityToRoom(int roomId, int amenityId)
+        {
+            try
+            {
+                var room = await _dbContext.Rooms
+                    .Include(r => r.Amenities)
+                    .FirstOrDefaultAsync(r => r.RoomID == roomId);
+
+                if (room == null)
+                {
+                    throw new KeyNotFoundException($"Camera con ID {roomId} non trovata.");
+                }
+
+                var amenity = await _dbContext.Amenities
+                    .FirstOrDefaultAsync(a => a.AmenityID == amenityId);
+
+                if (amenity == null)
+                {
+                    throw new KeyNotFoundException($"Comodità con ID {amenityId} non trovata.");
+                }
+
+                if (room.Amenities.Any(a => a.AmenityID == amenityId))
+                {
+                    throw new InvalidOperationException($"Comodità: {amenity.Name} già presenta nella camera {room.RoomNumber}");
+                }
+
+                room.Amenities.Add(amenity);
+                _dbContext.Rooms.Update(room);
+                await _dbContext.SaveChangesAsync();
+
+                return room;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                _logger.LogError(dbEx, $"Errore durante l'aggiornamento della camera con ID {roomId}.");
+                throw new InvalidOperationException($"Errore durante l'aggiornamento della camera, riprovare più tardi.", dbEx);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Errore generico durante l'aggiunta della comodità alla camera con ID {roomId}.");
+                throw;
+            }
+        }
+
+        public async Task RemoveAmenityFromRoom(int roomId, int amenityId)
+        {
+            try
+            {
+                var room = await _dbContext.Rooms
+                    .Include(r => r.Amenities)
+                    .FirstOrDefaultAsync(r => r.RoomID == roomId);
+
+                if (room == null)
+                {
+                    throw new KeyNotFoundException($"Camera con ID {roomId} non trovata.");
+                }
+
+                var amenity = await _dbContext.Amenities
+                    .FirstOrDefaultAsync(a => a.AmenityID == amenityId);
+
+                if (amenity == null)
+                {
+                    throw new KeyNotFoundException($"Comodità con ID {amenityId} non trovata.");
+                }
+
+                room.Amenities.Remove(amenity);
+                _dbContext.Rooms.Update(room);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException dbEx)
+            {
+                _logger.LogError(dbEx, $"Errore durante l'aggiornamento della camera con ID {roomId}.");
+                throw new InvalidOperationException($"Errore durante l'aggiornamento della camera, riprovare più tardi.", dbEx);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Errore generico durante l'aggiunta della comodità alla camera con ID {roomId}.");
+                throw;
+            }
+        }
+
+        public async Task<Room> Update(int id, Room updateRoom)
         {
             try
             {
@@ -84,20 +187,6 @@ namespace back_end.Services
                     throw new KeyNotFoundException($"Camera con ID {id} non trovata");
                 }
 
-                List<Amenity> amenities = new List<Amenity>();
-                if (amenitiesIds != null && amenitiesIds.Any())
-                {
-                    amenities = await _dbContext.Amenities
-                        .Where(a => amenitiesIds.Contains(a.AmenityID))
-                        .ToListAsync();
-
-                    if (amenities.Count != amenitiesIds.Count)
-                    {
-                        throw new ArgumentException("Una o più comodità non trovate.");
-                    }
-                }
-
-                existingRoom.Amenities = amenities;
                 existingRoom.Capacity = updateRoom.Capacity;
                 existingRoom.Description = updateRoom.Description;
                 existingRoom.IsAvailable = updateRoom.IsAvailable;

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using back_end.DataModels;
 using back_end.Interfaces;
 using back_end.Models;
+using back_end.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -70,8 +71,54 @@ namespace back_end.Controllers
             }
         }
 
+
+        [HttpPost("{roomId}/amenity/{amenityId}")]
+        public async Task<IActionResult> AddAmenityToRoom(int roomId, int amenityId)
+        {
+            try
+            {
+                var room = await _roomService.AddAmenityToRoom(roomId, amenityId);
+                return Ok(room);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Errore interno del server.", details = ex.Message });
+            }
+        }
+
+        [HttpDelete("{roomId}/amenity/{amenityId}")]
+        public async Task<IActionResult> RemoveAmenityFromRoom(int roomId, int amenityId)
+        {
+            try
+            {
+                await _roomService.RemoveAmenityFromRoom(roomId, amenityId);
+                return Ok(new {message = "Rimozione avvenuta con successo"});
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Errore interno del server.", details = ex.Message });
+            }
+        }
+
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(int id, [FromBody] RoomRequest updateRequest)
+        public async Task<IActionResult> Edit(int id, [FromBody] Room updateRoom)
         {
             if (!ModelState.IsValid)
             {
@@ -80,21 +127,10 @@ namespace back_end.Controllers
 
             try
             {
-                var newRoom = new Room
-                {
-                    Capacity = updateRequest.Capacity,
-                    Description = updateRequest.Description,
-                    IsAvailable = updateRequest.IsAvailable,
-                    Price = updateRequest.Price,
-                    RoomNumber = updateRequest.RoomNumber,
-                    RoomType = updateRequest.RoomType,
-                    size = updateRequest.size
-                };
 
-                var updatedRoom = await _roomService.Update(
+               var updatedRoom = await _roomService.Update(
                     id,
-                    newRoom,
-                    updateRequest.AmenitiesIds);
+                    updateRoom);
                 return Ok(updatedRoom);
             }
             catch (KeyNotFoundException)

@@ -8,7 +8,6 @@ namespace back_end.Interfaces
         public Task<Role> AddRoleToUser(int userId, int roleId);
         public Task RemoveRoleFromUser(int userId, int roleId);
         public Task<User> GetById(int id);
-        //public Task<User> Update(int id, User updateUser);
     }
 }
 
