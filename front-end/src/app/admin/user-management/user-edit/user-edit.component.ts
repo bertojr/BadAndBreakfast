@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, input, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { iUser } from '../../../models/i-user';
@@ -7,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../auth/auth.service';
 import { RoleService } from '../../../services/role.service';
 import { iRole } from '../../../models/i-role';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-user-edit',
@@ -15,7 +15,8 @@ import { iRole } from '../../../models/i-role';
 })
 export class UserEditComponent {
   userForm!: FormGroup;
-  user!: iUser;
+  @Input() user!: iUser; // dati dal componente chiamante
+  @Output() userUpdated = new EventEmitter<void>();
   roles: iRole[] = [];
   errorMessage: string | any = '';
   selectedRoleId: number | null = null;
@@ -25,11 +26,14 @@ export class UserEditComponent {
     private userSvc: UserService,
     private authSvc: AuthService,
     private fb: FormBuilder,
-    private roleSvc: RoleService
+    private roleSvc: RoleService,
+    private activeModal: NgbActiveModal
   ) {}
 
   ngOnInit(): void {
     this.initializeForm();
+    this.populateForm(this.user);
+    /*
     this.route.params.subscribe((params: any) => {
       const userId = params.id;
       if (userId) {
@@ -47,7 +51,7 @@ export class UserEditComponent {
           },
         });
       }
-    });
+    });*/
 
     // popolamento select dei ruoli
     this.roleSvc.getAll().subscribe({
@@ -82,24 +86,26 @@ export class UserEditComponent {
   }
 
   private populateForm(user: iUser): void {
-    const formattedDateOfBirth = user.dateOfBirth
-      ? user.dateOfBirth.split('T')[0]
-      : null;
-    this.userForm.patchValue({
-      name: user.name || null,
-      email: user.email || null,
-      cell: user.cell || null,
-      dateOfBirth: formattedDateOfBirth || null,
-      nationally: user.nationally || null,
-      gender: user.gender || '',
-      password: 'non serve a niente',
-      passwordHash: user.passwordHash || null,
-      passwordSalt: user.passwordSalt || null,
-      country: user.country || null,
-      address: user.address || null,
-      city: user.city || null,
-      cap: user.cap || null,
-    });
+    if (user) {
+      const formattedDateOfBirth = user.dateOfBirth
+        ? user.dateOfBirth.split('T')[0]
+        : null;
+      this.userForm.patchValue({
+        name: user.name || null,
+        email: user.email || null,
+        cell: user.cell || null,
+        dateOfBirth: formattedDateOfBirth || null,
+        nationally: user.nationally || null,
+        gender: user.gender || '',
+        password: 'non serve a niente',
+        passwordHash: user.passwordHash || null,
+        passwordSalt: user.passwordSalt || null,
+        country: user.country || null,
+        address: user.address || null,
+        city: user.city || null,
+        cap: user.cap || null,
+      });
+    }
   }
 
   addRole(): void {
@@ -142,6 +148,8 @@ export class UserEditComponent {
         this.userSvc.update(this.user.userID, userUpdate).subscribe({
           next: () => {
             this.errorMessage = null;
+            this.userUpdated.emit();
+            this.closeModal();
           },
           error: (error) => {
             this.errorMessage =
@@ -153,6 +161,8 @@ export class UserEditComponent {
         this.authSvc.register(newUser).subscribe({
           next: () => {
             this.errorMessage = null;
+            this.userUpdated.emit();
+            this.closeModal();
           },
           error: (error) => {
             this.errorMessage =
@@ -161,5 +171,9 @@ export class UserEditComponent {
         });
       }
     }
+  }
+
+  closeModal() {
+    this.activeModal.close();
   }
 }
