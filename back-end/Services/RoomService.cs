@@ -1,7 +1,6 @@
-﻿using System;
+﻿
 using back_end.DataModels;
 using back_end.Interfaces;
-using back_end.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace back_end.Services
@@ -92,7 +91,7 @@ namespace back_end.Services
             }
         }
 
-        public async Task<Room> AddAmenityToRoom(int roomId, int amenityId)
+        public async Task<Amenity> AddAmenityToRoom(int roomId, int amenityId)
         {
             try
             {
@@ -122,7 +121,7 @@ namespace back_end.Services
                 _dbContext.Rooms.Update(room);
                 await _dbContext.SaveChangesAsync();
 
-                return room;
+                return amenity;
             }
             catch (DbUpdateException dbEx)
             {

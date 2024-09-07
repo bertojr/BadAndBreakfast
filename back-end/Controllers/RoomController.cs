@@ -7,6 +7,7 @@ using back_end.Interfaces;
 using back_end.Models;
 using back_end.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -71,14 +72,37 @@ namespace back_end.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var room = await _roomService.GetById(id);
+                return Ok(room);
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new { message = $"Utente con ID {id} non trovato" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return StatusCode(500, new { message = ex.Message });
+            }
+            catch (Exception)
+            {
+                // Altre eccezzioni non previste
+                return StatusCode(500, new { message = "Errore imprevisto." });
+            }
+        }
+
 
         [HttpPost("{roomId}/amenity/{amenityId}")]
         public async Task<IActionResult> AddAmenityToRoom(int roomId, int amenityId)
         {
             try
             {
-                var room = await _roomService.AddAmenityToRoom(roomId, amenityId);
-                return Ok(room);
+                var amenity = await _roomService.AddAmenityToRoom(roomId, amenityId);
+                return Ok(amenity);
             }
             catch (KeyNotFoundException ex)
             {

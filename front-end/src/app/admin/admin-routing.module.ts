@@ -5,14 +5,14 @@ import { AdminComponent } from './admin.component';
 const routes: Routes = [
   { path: '', component: AdminComponent },
   {
-    path: 'user',
+    path: 'admin/user',
     loadChildren: () =>
       import('./user-management/user-management.module').then(
         (m) => m.UserManagementModule
       ),
   },
   {
-    path: 'room',
+    path: 'admin/room',
     loadChildren: () =>
       import('./room-management/room-management.module').then(
         (m) => m.RoomManagementModule

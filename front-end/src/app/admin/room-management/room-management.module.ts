@@ -5,17 +5,15 @@ import { RoomManagementRoutingModule } from './room-management-routing.module';
 import { RoomManagementComponent } from './room-management.component';
 import { RoomListComponent } from './room-list/room-list.component';
 import { RoomEditComponent } from './room-edit/room-edit.component';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    RoomManagementComponent,
-    RoomListComponent,
-    RoomEditComponent
-  ],
+  declarations: [RoomManagementComponent, RoomListComponent, RoomEditComponent],
   imports: [
     CommonModule,
-    RoomManagementRoutingModule
-  ]
+    RoomManagementRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
 })
-export class RoomManagementModule { }
+export class RoomManagementModule {}

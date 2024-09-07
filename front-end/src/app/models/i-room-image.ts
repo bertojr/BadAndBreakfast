@@ -1,2 +1,1 @@
-export interface IRoomImage {
-}
+export interface iRoomImage {}

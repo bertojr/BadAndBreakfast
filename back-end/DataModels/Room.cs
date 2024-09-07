@@ -21,8 +21,7 @@ namespace back_end.DataModels
 		public string RoomType { get; set; }
 
         [Required(ErrorMessage = "La capacità è obbligatoria")]
-		[MaxLength(10, ErrorMessage = "La capacità non può superare i 10 caratteri")]
-		public string Capacity { get; set; }
+		public int Capacity { get; set; }
 
         [Required(ErrorMessage = "Il prezzo è obbligatorio")]
 		[Range(0, double.MaxValue, ErrorMessage = "Il prezzo deve essere un " +
