@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, input, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../services/user.service';
 import { iUser } from '../../../models/i-user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -22,7 +21,6 @@ export class UserEditComponent {
   selectedRoleId: number | null = null;
 
   constructor(
-    private route: ActivatedRoute,
     private userSvc: UserService,
     private authSvc: AuthService,
     private fb: FormBuilder,
@@ -33,25 +31,6 @@ export class UserEditComponent {
   ngOnInit(): void {
     this.initializeForm();
     this.populateForm(this.user);
-    /*
-    this.route.params.subscribe((params: any) => {
-      const userId = params.id;
-      if (userId) {
-        // se esiste un id recupera l'utente dal servizio
-        this.userSvc.getById(userId).subscribe({
-          next: (user) => {
-            this.user = user;
-            console.log(this.user);
-            this.populateForm(user);
-            this.errorMessage = null;
-          },
-          error: (error) => {
-            this.errorMessage =
-              error.message || 'Si è verificato un errore durante la ricerca';
-          },
-        });
-      }
-    });*/
 
     // popolamento select dei ruoli
     this.roleSvc.getAll().subscribe({

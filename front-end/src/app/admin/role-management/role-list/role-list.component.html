@@ -1,1 +1,39 @@
-<p>role-list works!</p>
+<h1 class="mb-4">Lista dei ruoli</h1>
+
+<div class="table-responsive">
+  <button class="btn btn-warning btn-sm" (click)="openModal()">
+    Crea nuovo ruolo
+  </button>
+  <table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th>Nome</th>
+        <th>Descrizione</th>
+        <th>Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let role of roles">
+        <td>{{ role.name }}</td>
+        <td>{{ role.description }}</td>
+        <td>
+          <div class="btn-group" role="group" aria-label="Azioni">
+            <button class="btn btn-warning btn-sm" (click)="openModal(role)">
+              Modifica
+            </button>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="deleteUser(role.roleID)"
+            >
+              Elimina
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger mt-3">
+  {{ errorMessage }}
+</div>

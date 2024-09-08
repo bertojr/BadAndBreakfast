@@ -19,20 +19,26 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'amenity',
+    path: 'admin/amenity',
     loadChildren: () =>
       import('./amenity-management/amenity-management.module').then(
         (m) => m.AmenityManagementModule
       ),
   },
   {
-    path: 'additional-service',
+    path: 'admin/additional-service',
     loadChildren: () =>
       import(
         './additional-service-management/additional-service-management.module'
       ).then((m) => m.AdditionalServiceManagementModule),
   },
-  { path: 'role', loadChildren: () => import('./role-management/role-management.module').then(m => m.RoleManagementModule) },
+  {
+    path: 'admin/role',
+    loadChildren: () =>
+      import('./role-management/role-management.module').then(
+        (m) => m.RoleManagementModule
+      ),
+  },
 ];
 
 @NgModule({
