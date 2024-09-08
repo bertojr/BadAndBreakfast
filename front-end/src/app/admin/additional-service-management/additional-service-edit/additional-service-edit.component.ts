@@ -1,8 +1,9 @@
 import { AdditionalServiceService } from './../../../services/additional-service.service';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { iAdditionalService } from '../../../models/i-additional-service';
 import { ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-additional-service-edit',
@@ -10,51 +11,27 @@ import { NgForm } from '@angular/forms';
   styleUrl: './additional-service-edit.component.scss',
 })
 export class AdditionalServiceEditComponent {
-  service: iAdditionalService = {
-    serviceID: 0,
-    name: '',
-    unitPrice: 0,
-  };
+  @Input() service!: iAdditionalService;
+  @Output() serviceUpdated = new EventEmitter<void>();
   errorMessage: string | null = null;
   isEditMode: boolean = false;
 
   constructor(
     private additionalServiceSvc: AdditionalServiceService,
-    private route: ActivatedRoute
+    private activeModale: NgbActiveModal
   ) {}
-
-  ngOnInit(): void {
-    this.route.params.subscribe((params: any) => {
-      const serviceId = params.id;
-      if (serviceId) {
-        this.isEditMode = true;
-        this.loadService(serviceId);
-      }
-    });
-  }
-
-  private loadService(serviceId: number): void {
-    this.additionalServiceSvc.getById(serviceId).subscribe({
-      next: (service) => {
-        this.errorMessage = null;
-        this.service = service;
-      },
-      error: (error) => {
-        this.errorMessage =
-          error.message || 'Errore durante il caricamento della camera';
-      },
-    });
-  }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
-      if (this.isEditMode) {
+      if (this.service.serviceID) {
         // modifica esistente
         this.additionalServiceSvc
           .update(this.service.serviceID, this.service)
           .subscribe({
             next: () => {
               this.errorMessage = null;
+              this.serviceUpdated.emit();
+              this.closeModal();
             },
             error: (error) => {
               this.errorMessage =
@@ -72,6 +49,8 @@ export class AdditionalServiceEditComponent {
         this.additionalServiceSvc.create(newService).subscribe({
           next: () => {
             this.errorMessage = null;
+            this.serviceUpdated.emit();
+            this.closeModal();
           },
           error: (error) => {
             this.errorMessage =
@@ -80,5 +59,8 @@ export class AdditionalServiceEditComponent {
         });
       }
     }
+  }
+  closeModal(): void {
+    this.activeModale.close();
   }
 }

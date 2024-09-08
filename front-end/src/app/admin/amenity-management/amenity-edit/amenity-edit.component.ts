@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { iAmenity } from '../../../models/i-amenity';
 import { AmenityService } from '../../../services/amenity.service';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-amenity-edit',
@@ -10,49 +10,24 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './amenity-edit.component.scss',
 })
 export class AmenityEditComponent {
-  amenity: iAmenity = {
-    amenityID: 0,
-    name: '',
-  };
+  @Input() amenity!: iAmenity;
+  @Output() amenityUpdated = new EventEmitter<void>();
   errorMessage: string | null = null;
-  isEditMode: boolean = false;
 
   constructor(
     private amenitySvc: AmenityService,
-    private route: ActivatedRoute
+    private activeModal: NgbActiveModal
   ) {}
-
-  ngOnInit(): void {
-    // Controlla se stiamo modificando una comodità esistente
-    this.route.params.subscribe((params: any) => {
-      const amenityId = params.id;
-      if (amenityId) {
-        this.isEditMode = true;
-        this.loadAmenity(amenityId);
-      }
-    });
-  }
-
-  private loadAmenity(amenityId: number): void {
-    this.amenitySvc.getById(amenityId).subscribe({
-      next: (amenity) => {
-        this.errorMessage = null;
-        this.amenity = amenity;
-      },
-      error: (error) => {
-        this.errorMessage =
-          error.message || 'Errore durante il caricamento della camera';
-      },
-    });
-  }
 
   onSubmit(form: NgForm) {
     if (form.valid) {
-      if (this.isEditMode) {
+      if (this.amenity.amenityID) {
         // modifica esistente
         this.amenitySvc.update(this.amenity.amenityID, this.amenity).subscribe({
           next: () => {
             this.errorMessage = null;
+            this.amenityUpdated.emit();
+            this.closeModal();
           },
           error: (error) => {
             this.errorMessage =
@@ -69,6 +44,8 @@ export class AmenityEditComponent {
         this.amenitySvc.create(newAmenity).subscribe({
           next: () => {
             this.errorMessage = null;
+            this.amenityUpdated.emit();
+            this.closeModal();
           },
           error: (error) => {
             this.errorMessage =
@@ -77,5 +54,9 @@ export class AmenityEditComponent {
         });
       }
     }
+  }
+
+  closeModal() {
+    this.activeModal.close();
   }
 }
