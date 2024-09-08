@@ -11,9 +11,11 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { HttpErrorInterceptor } from './interceptor/http-error.interceptor';
 import { AdminModule } from './admin/admin.module';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import { RoomsPageComponent } from './pages/rooms-page/rooms-page.component';
+import { ContactPageComponent } from './pages/contact-page/contact-page.component';
 
 @NgModule({
-  declarations: [AppComponent, HomePageComponent],
+  declarations: [AppComponent, HomePageComponent, RoomsPageComponent, ContactPageComponent],
   imports: [BrowserModule, AppRoutingModule, AdminModule],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
