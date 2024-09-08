@@ -1,173 +1,186 @@
-<h1>{{ !room ? "Crea una nuova camera" : "Modifica la camera" }}</h1>
-
-<form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
-  <div class="form-group">
-    <label for="roomNumber">Numero Camera</label>
-    <input
-      type="number"
-      id="roomNumber"
-      class="form-control"
-      formControlName="roomNumber"
-    />
-
-    <div
-      *ngIf="
-        roomForm.get('roomNumber')?.invalid &&
-        roomForm.get('roomNumber')?.touched
-      "
-      class="text-danger"
-    >
-      Numero camera è obbligatoria
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="capacity">Capacità</label>
-    <input
-      type="number"
-      id="capacity"
-      class="form-control"
-      formControlName="capacity"
-    />
-
-    <div
-      *ngIf="
-        roomForm.get('capacity')?.invalid && roomForm.get('capacity')?.touched
-      "
-      class="text-danger"
-    >
-      Capacità è obbligatoria
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="description">Descrizione</label>
-    <textarea
-      id="description"
-      class="form-control"
-      formControlName="description"
-      required
-    ></textarea>
-
-    <div
-      *ngIf="
-        roomForm.get('description')?.invalid &&
-        roomForm.get('description')?.touched
-      "
-      class="text-danger"
-    >
-      Descrizione è obbligatoria
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="price">Prezzo</label>
-    <input
-      type="number"
-      id="price"
-      class="form-control"
-      formControlName="price"
-    />
-
-    <div
-      *ngIf="roomForm.get('price')?.invalid && roomForm.get('price')?.touched"
-      class="text-danger"
-    >
-      Prezzo è obbligatorio
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="size">Dimensione</label>
-    <input type="text" id="size" class="form-control" formControlName="size" />
-
-    <div
-      *ngIf="
-        roomForm.get('description')?.invalid &&
-        roomForm.get('description')?.touched
-      "
-      class="text-danger"
-    >
-      Descrizione è obbligatoria
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="roomType">Tipo di Camera</label>
-    <input
-      type="text"
-      id="roomType"
-      class="form-control"
-      formControlName="roomType"
-    />
-
-    <div
-      *ngIf="
-        roomForm.get('roomType')?.invalid && roomForm.get('roomType')?.touched
-      "
-      class="text-danger"
-    >
-      Tipo di camera è obbligatoria
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="isAvailable">Disponibile</label>
-    <input type="checkbox" id="isAvailable" formControlName="isAvailable" />
-  </div>
-
-  <!-- Select multipla per le comodità -->
-  <div *ngIf="!room" class="form-group">
-    <label for="amenitiesIds">Comodità</label>
-    <select
-      id="amenitiesIds"
-      class="form-control"
-      formControlName="amenitiesIds"
-      multiple
-    >
-      <option *ngFor="let amenity of amenities" [value]="amenity.amenityID">
-        {{ amenity.name }}
-      </option>
-    </select>
-  </div>
-
-  <button type="submit" class="btn btn-primary" [disabled]="roomForm.invalid">
-    {{ room ? "Aggiorna Camera" : "Crea Camera" }}
+<div class="modal-header">
+  <h4 class="modal-title">
+    {{ room ? "Modifica camera" : "Crea nuova camera" }}
+  </h4>
+  <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
   </button>
-  <a routerLink="../" class="btn btn-secondary">Annulla</a>
-</form>
-
-<div *ngIf="room">
-  <div class="form-group mb-3">
-    <label for="amenities">Comodità</label>
-    <select id="amenities" class="form-control" [(ngModel)]="selectedAmenity">
-      <option [ngValue]="null">-- Seleziona una comodità --</option>
-      <option *ngFor="let amenity of amenities" [value]="amenity.amenityID">
-        {{ amenity.name }}
-      </option>
-    </select>
-    <button type="button" class="btn btn-primary mt-2" (click)="addAmenity()">
-      Aggiungi comodità
-    </button>
-  </div>
-
-  <div class="form-group mb-3">
-    <label for="selectedAmenity">Comodità</label>
-    <ul id="selectedAmenity">
-      <li *ngFor="let amenity of room.amenities">
-        {{ amenity.name }}
-        <button
-          class="btn btn-danger"
-          (click)="removeAmenity(room.roomID, amenity.amenityID)"
-        >
-          Rimuovi
-        </button>
-      </li>
-    </ul>
-  </div>
 </div>
+<div class="modal-body">
+  <form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="roomNumber">Numero Camera</label>
+      <input
+        type="number"
+        id="roomNumber"
+        class="form-control"
+        formControlName="roomNumber"
+      />
 
-<!-- Visualizzazione errori -->
-<div *ngIf="errorMessage" class="alert alert-danger mt-3">
-  {{ errorMessage }}
+      <div
+        *ngIf="
+          roomForm.get('roomNumber')?.invalid &&
+          roomForm.get('roomNumber')?.touched
+        "
+        class="text-danger"
+      >
+        Numero camera è obbligatoria
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="capacity">Capacità</label>
+      <input
+        type="number"
+        id="capacity"
+        class="form-control"
+        formControlName="capacity"
+      />
+
+      <div
+        *ngIf="
+          roomForm.get('capacity')?.invalid && roomForm.get('capacity')?.touched
+        "
+        class="text-danger"
+      >
+        Capacità è obbligatoria
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Descrizione</label>
+      <textarea
+        id="description"
+        class="form-control"
+        formControlName="description"
+        required
+      ></textarea>
+
+      <div
+        *ngIf="
+          roomForm.get('description')?.invalid &&
+          roomForm.get('description')?.touched
+        "
+        class="text-danger"
+      >
+        Descrizione è obbligatoria
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="price">Prezzo</label>
+      <input
+        type="number"
+        id="price"
+        class="form-control"
+        formControlName="price"
+      />
+
+      <div
+        *ngIf="roomForm.get('price')?.invalid && roomForm.get('price')?.touched"
+        class="text-danger"
+      >
+        Prezzo è obbligatorio
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="size">Dimensione</label>
+      <input
+        type="text"
+        id="size"
+        class="form-control"
+        formControlName="size"
+      />
+
+      <div
+        *ngIf="
+          roomForm.get('description')?.invalid &&
+          roomForm.get('description')?.touched
+        "
+        class="text-danger"
+      >
+        Descrizione è obbligatoria
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="roomType">Tipo di Camera</label>
+      <input
+        type="text"
+        id="roomType"
+        class="form-control"
+        formControlName="roomType"
+      />
+
+      <div
+        *ngIf="
+          roomForm.get('roomType')?.invalid && roomForm.get('roomType')?.touched
+        "
+        class="text-danger"
+      >
+        Tipo di camera è obbligatoria
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="isAvailable">Disponibile</label>
+      <input type="checkbox" id="isAvailable" formControlName="isAvailable" />
+    </div>
+
+    <!-- Select multipla per le comodità -->
+    <div *ngIf="!room" class="form-group">
+      <label for="amenitiesIds">Comodità</label>
+      <select
+        id="amenitiesIds"
+        class="form-control"
+        formControlName="amenitiesIds"
+        multiple
+      >
+        <option *ngFor="let amenity of amenities" [value]="amenity.amenityID">
+          {{ amenity.name }}
+        </option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="roomForm.invalid">
+      {{ room ? "Aggiorna Camera" : "Crea Camera" }}
+    </button>
+    <a routerLink="../" class="btn btn-secondary">Annulla</a>
+  </form>
+
+  <div *ngIf="room">
+    <div class="form-group mb-3">
+      <label for="amenities">Comodità</label>
+      <select id="amenities" class="form-control" [(ngModel)]="selectedAmenity">
+        <option [ngValue]="null">-- Seleziona una comodità --</option>
+        <option *ngFor="let amenity of amenities" [value]="amenity.amenityID">
+          {{ amenity.name }}
+        </option>
+      </select>
+      <button type="button" class="btn btn-primary mt-2" (click)="addAmenity()">
+        Aggiungi comodità
+      </button>
+    </div>
+
+    <div class="form-group mb-3">
+      <label for="selectedAmenity">Comodità</label>
+      <ul id="selectedAmenity">
+        <li *ngFor="let amenity of room.amenities">
+          {{ amenity.name }}
+          <button
+            class="btn btn-danger"
+            (click)="removeAmenity(room.roomID, amenity.amenityID)"
+          >
+            Rimuovi
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Visualizzazione errori -->
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
 </div>

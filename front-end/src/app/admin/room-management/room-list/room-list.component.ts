@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { iRoom } from '../../../models/i-room';
 import { RoomService } from '../../../services/room.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RoomEditComponent } from '../room-edit/room-edit.component';
 
 @Component({
   selector: 'app-room-list',
@@ -11,9 +13,13 @@ export class RoomListComponent {
   rooms: iRoom[] = [];
   errorMessage: string | null = '';
 
-  constructor(private roomSvc: RoomService) {}
+  constructor(private roomSvc: RoomService, private modalSvc: NgbModal) {}
 
   ngOnInit(): void {
+    this.loadRooms();
+  }
+
+  private loadRooms() {
     this.roomSvc.getAll().subscribe({
       next: (rooms) => {
         this.rooms = rooms;
@@ -36,6 +42,15 @@ export class RoomListComponent {
         this.errorMessage =
           error.message || 'Si è verificato un errore durante la eliminazione';
       },
+    });
+  }
+
+  openModal(room?: iRoom) {
+    const modalRef = this.modalSvc.open(RoomEditComponent);
+    modalRef.componentInstance.room = room;
+
+    modalRef.componentInstance.roomUpdated.subscribe(() => {
+      this.loadRooms();
     });
   }
 }

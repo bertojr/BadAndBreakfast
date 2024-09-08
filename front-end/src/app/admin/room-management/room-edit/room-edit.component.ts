@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AmenityService } from '../../../services/amenity.service';
 import { RoomService } from '../../../services/room.service';
 import { iAmenity } from '../../../models/i-amenity';
 import { iRoom } from '../../../models/i-room';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-room-edit',
@@ -14,32 +15,25 @@ import { iRoom } from '../../../models/i-room';
 export class RoomEditComponent {
   amenities: iAmenity[] = [];
   errorMessage: string | null = '';
-  room!: iRoom;
+  @Input() room!: iRoom;
+  @Output() roomUpdated = new EventEmitter<void>();
   roomForm!: FormGroup;
   selectedAmenityId: number[] = [];
   selectedAmenity: number | null = null;
 
   constructor(
-    private route: ActivatedRoute,
     private roomSvc: RoomService,
     private amenitySvc: AmenityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private activeModal: NgbActiveModal
   ) {}
 
   ngOnInit(): void {
     // inizializzo il form
     this.initializeForm();
-
+    this.populateForm(this.room);
     // Caricare tutte le comodità per la selezione
     this.loadAmenities();
-
-    // Controlla se stiamo modificando una camera esistente
-    this.route.params.subscribe((params: any) => {
-      const roomId = params.id;
-      if (roomId) {
-        this.loadRoom(roomId);
-      }
-    });
   }
 
   private initializeForm(): void {
@@ -56,15 +50,17 @@ export class RoomEditComponent {
   }
 
   private populateForm(room: iRoom): void {
-    this.roomForm.patchValue({
-      roomNumber: room.roomNumber,
-      capacity: room.capacity,
-      description: room.description,
-      isAvailable: room.isAvailable,
-      price: room.price,
-      size: room.size,
-      roomType: room.roomType,
-    });
+    if (room) {
+      this.roomForm.patchValue({
+        roomNumber: room.roomNumber,
+        capacity: room.capacity,
+        description: room.description,
+        isAvailable: room.isAvailable,
+        price: room.price,
+        size: room.size,
+        roomType: room.roomType,
+      });
+    }
   }
   private loadAmenities() {
     this.amenitySvc.getAll().subscribe({
@@ -81,12 +77,14 @@ export class RoomEditComponent {
 
   onSubmit(): void {
     if (this.roomForm.valid) {
-      const roomData: iRoom = this.roomForm.value;
       if (this.room) {
+        const roomUpdate: iRoom = this.roomForm.value;
         // Modifica esistente
-        this.roomSvc.update(this.room.roomID, roomData).subscribe({
+        this.roomSvc.update(this.room.roomID, roomUpdate).subscribe({
           next: () => {
             this.errorMessage = null;
+            this.roomUpdated.emit();
+            this.closeModal();
           },
           error: (error) => {
             this.errorMessage =
@@ -95,9 +93,12 @@ export class RoomEditComponent {
         });
       } else {
         // Nuova creazione
-        this.roomSvc.create(roomData).subscribe({
+        const newRoom: Partial<iRoom> = this.roomForm.value;
+        this.roomSvc.create(newRoom).subscribe({
           next: () => {
             this.errorMessage = null;
+            this.roomUpdated.emit();
+            this.closeModal();
           },
           error: (error) => {
             this.errorMessage =
@@ -106,19 +107,6 @@ export class RoomEditComponent {
         });
       }
     }
-  }
-  private loadRoom(roomId: number) {
-    this.roomSvc.getById(roomId).subscribe({
-      next: (room) => {
-        this.errorMessage = null;
-        this.room = room;
-        this.populateForm(room);
-      },
-      error: (error) => {
-        this.errorMessage =
-          error.message || 'Errore durante il caricamento della camera';
-      },
-    });
   }
 
   addAmenity(): void {
@@ -151,5 +139,9 @@ export class RoomEditComponent {
           error.message || 'Si è verificato un errore durante la ricerca';
       },
     });
+  }
+
+  closeModal(): void {
+    this.activeModal.close();
   }
 }
