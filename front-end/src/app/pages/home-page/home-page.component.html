@@ -18,12 +18,21 @@
           <div class="row">
             <div class="col-md-3">
               <label>Check-in Date</label>
-              <input type="date" class="form-control" />
+              <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="checkInDate"
+              />
             </div>
             <div class="col-md-3">
               <label>Check-out Date</label>
-              <input type="date" class="form-control" />
+              <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="checkOutDate"
+              />
             </div>
+            <!--
             <div class="col-md-2">
               <label>Adults</label>
               <select class="form-control">
@@ -32,17 +41,11 @@
                 <option>3</option>
                 <option>4</option>
               </select>
-            </div>
-            <div class="col-md-2">
-              <label>Children</label>
-              <select class="form-control">
-                <option>0</option>
-                <option>1</option>
-                <option>2</option>
-              </select>
-            </div>
+            </div> -->
             <div class="col-md-2 d-flex align-items-end">
-              <button class="btn btn-primary w-100">Search</button>
+              <button class="btn btn-primary w-100" (click)="search()">
+                Search
+              </button>
             </div>
           </div>
         </div>

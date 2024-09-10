@@ -1,0 +1,30 @@
+<div class="col-md-3">
+  <label>Check-in Date</label>
+  <input type="date" class="form-control" [(ngModel)]="checkInDate" />
+</div>
+<div class="col-md-3">
+  <label>Check-out Date</label>
+  <input type="date" class="form-control" [(ngModel)]="checkOutDate" />
+</div>
+<div class="col-md-2 d-flex align-items-end">
+  <button class="btn btn-primary w-100" (click)="search()">Search</button>
+</div>
+
+<div *ngIf="checkInDate && checkOutDate">
+  <div *ngIf="!errorMessage; else noResults">
+    <ul>
+      <li *ngFor="let room of availableRooms">
+        {{ room.roomNumber }}
+        <br />
+        {{ room.capacity }}
+        <br />
+        {{ room.size }}
+        <br />
+        {{ room.price | currency }}
+      </li>
+    </ul>
+  </div>
+  <ng-template #noResults>
+    <p>{{ errorMessage }}</p>
+  </ng-template>
+</div>

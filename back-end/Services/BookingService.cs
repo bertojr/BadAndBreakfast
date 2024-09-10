@@ -202,6 +202,32 @@ namespace back_end.Services
                 throw new InvalidOperationException($"Non è stato possibile recuperare le prenotazioni, riprovare più tardi.", ex);
             }
         }
+
+        public async Task<List<Room>> GetAvailableRooms (DateOnly checkInDate, DateOnly checkOutDate)
+        {
+            try
+            {
+                var availableRooms = await _dbContext.Rooms
+                    .Where(r => !r.Bookings
+                    .Any(b => b.CheckInDate < checkOutDate && b.CheckOutDate > checkInDate))
+                    .Where(r => r.IsAvailable == true)
+                    .Include(r => r.RoomImages)
+                    .Include(r => r.Amenities)
+                    .ToListAsync();
+
+                if(availableRooms.Count == 0)
+                {
+                    throw new KeyNotFoundException("Nessuna camera disponibile per la data selezionata");
+                }
+
+                return availableRooms;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Errore durante il recupero delle camere disponibili");
+                throw;
+            }
+        }
     }
 }
 

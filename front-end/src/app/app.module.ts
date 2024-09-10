@@ -13,10 +13,18 @@ import { AdminModule } from './admin/admin.module';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { RoomsPageComponent } from './pages/rooms-page/rooms-page.component';
 import { ContactPageComponent } from './pages/contact-page/contact-page.component';
+import { BookingsComponent } from './pages/bookings/bookings.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, HomePageComponent, RoomsPageComponent, ContactPageComponent],
-  imports: [BrowserModule, AppRoutingModule, AdminModule],
+  declarations: [
+    AppComponent,
+    HomePageComponent,
+    RoomsPageComponent,
+    ContactPageComponent,
+    BookingsComponent,
+  ],
+  imports: [BrowserModule, AppRoutingModule, AdminModule, FormsModule],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

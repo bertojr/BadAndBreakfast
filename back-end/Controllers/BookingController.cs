@@ -101,6 +101,27 @@ namespace back_end.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+        [HttpPost("search")]
+        public async Task<IActionResult> SearchRooms(
+            [FromBody] SearchAvailableRoomsRequest request)
+        {
+            try
+            {
+                var availableRooms = await _bookingService.GetAvailableRooms(
+                    request.CheckInDate, request.CheckOutDate);
+
+                return Ok(availableRooms);
+            }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(new {message = ex.Message});
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { message = "Non è stato possibile recuperare le camere, riprovare più tardi." });
+            }
+        }
     }
 }
 
