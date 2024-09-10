@@ -31,7 +31,6 @@ namespace back_end.Controllers
             {
                 var createdBooking = await _bookingService.Create(
                     bookingRequest,
-                    bookingRequest.UserID,
                     bookingRequest.RoomIds,
                     bookingRequest.ServiceIds);
                 return Ok(createdBooking);

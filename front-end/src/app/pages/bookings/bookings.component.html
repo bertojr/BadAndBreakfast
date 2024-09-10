@@ -1,13 +1,19 @@
-<div class="col-md-3">
-  <label>Check-in Date</label>
-  <input type="date" class="form-control" [(ngModel)]="checkInDate" />
-</div>
-<div class="col-md-3">
-  <label>Check-out Date</label>
-  <input type="date" class="form-control" [(ngModel)]="checkOutDate" />
-</div>
-<div class="col-md-2 d-flex align-items-end">
-  <button class="btn btn-primary w-100" (click)="search()">Search</button>
+<div class="row">
+  <div class="col-md-2">
+    <label>Check-in Date</label>
+    <input type="date" class="form-control" [(ngModel)]="checkInDate" />
+  </div>
+  <div class="col-md-2">
+    <label>Check-out Date</label>
+    <input type="date" class="form-control" [(ngModel)]="checkOutDate" />
+  </div>
+  <div class="col-md-1">
+    <label>Ospiti</label>
+    <input type="number" class="form-control" [(ngModel)]="guests" />
+  </div>
+  <div class="col-md-2 d-flex align-items-end">
+    <button class="btn btn-primary w-100" (click)="search()">Search</button>
+  </div>
 </div>
 
 <div *ngIf="checkInDate && checkOutDate">
@@ -44,7 +50,7 @@
     <p>Numero di notti -> {{ getNumberOfNights() }}</p>
     <p>Totale {{ getTotal() }}</p>
 
-    <button class="btn btn-warning">Prenota ora</button>
+    <button (click)="toBook()" class="btn btn-warning">Prenota ora</button>
   </div>
   <ng-template #noRoomsSelected>
     <p>Numero di stanze | -</p>

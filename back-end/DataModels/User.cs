@@ -45,6 +45,6 @@ namespace back_end.DataModels
         public List<Review> Reviews { get; set; } = new List<Review>();
 		public List<Role> Roles { get; set; } = new List<Role>();
 		public List<Booking> Bookings { get; set; } = new List<Booking>();
-	}
+    }
 }
 

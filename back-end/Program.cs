@@ -62,6 +62,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt
     .UseSqlServer(builder.Configuration.GetConnectionString("SqlConn")));
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services
     .AddScoped<IAuthService, AuthService>()
     .AddScoped<IBookingService, BookingService>()

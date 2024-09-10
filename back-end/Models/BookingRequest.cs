@@ -1,14 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using back_end.DataModels;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace back_end.Models
 {
 	public class BookingRequest
 	{
-        public int UserID { get; set; }
         public List<int> RoomIds { get; set; }
-        public List<int> ServiceIds { get; set; }
+        public List<int>? ServiceIds { get; set; }
         [Required(ErrorMessage = "La data di check-in è obbligatoria.")]
         [DataType(DataType.Date, ErrorMessage = "La data di check-in deve essere" +
             " nel formato corretto.")]

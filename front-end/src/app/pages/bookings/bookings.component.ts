@@ -1,6 +1,7 @@
 import { iRoom } from './../../models/i-room';
 import { Component } from '@angular/core';
 import { BookingService } from '../../services/booking.service';
+import { iBooking } from '../../models/i-booking';
 
 @Component({
   selector: 'app-bookings',
@@ -15,6 +16,7 @@ export class BookingsComponent {
   errorMessage: string | null = null;
   availableRooms!: iRoom[];
   selectedRooms: iRoom[] = [];
+  guests: number = 2;
   constructor(private bookingSvc: BookingService) {}
 
   ngOnInit() {
@@ -89,5 +91,23 @@ export class BookingsComponent {
 
   getTotal(): number {
     return this.getDailyPrice() * this.getNumberOfNights();
+  }
+
+  toBook() {
+    const newBook = {
+      checkInDate: this.checkInDate,
+      checkOutDate: this.checkOutDate,
+      numberOfGuests: this.guests,
+      roomIds: this.selectedRooms.map((room) => room.roomID),
+      serviceIds: null,
+      specialRequests: null,
+    };
+
+    this.bookingSvc.create(newBook).subscribe({
+      next: () => {
+        this.errorMessage = null;
+      },
+      error: (error) => (this.errorMessage = error.message),
+    });
   }
 }

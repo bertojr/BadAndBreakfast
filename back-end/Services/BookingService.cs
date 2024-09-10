@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using back_end.DataModels;
 using back_end.Interfaces;
 using back_end.Models;
@@ -10,23 +11,40 @@ namespace back_end.Services
 	{
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<BookingService> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public BookingService(ApplicationDbContext dbContext,
-            ILogger<BookingService> logger)
+            ILogger<BookingService> logger, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Booking> Create(BookingRequest bookingRequest,
-            int userId, List<int> roomIds, List<int> serviceIds)
+            List<int> roomIds, List<int> serviceIds)
         {
+            // recupero la claim dell'utente loggato
+            var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            // converto userIdClaim in un intero
+            var userId = userIdClaim != null ? int.Parse(userIdClaim) : (int?)null;
+
+            if(userId == null)
+            {
+                throw new UnauthorizedAccessException("Utente non autenticato");
+            }
+
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
+
                 // recupero l'utente
-                var user = await _dbContext.Users.FindAsync(userId);
+                var user = await _dbContext.Users
+                    .Include(u => u.Roles)
+                    .Include(u => u.Reviews)
+                    .FirstOrDefaultAsync(u => u.UserID == userId.Value);
                 if(user == null)
                 {
                     throw new ArgumentException($"Utente con ID {userId} non trovato");
@@ -35,6 +53,8 @@ namespace back_end.Services
                 // recupero le camere
                 var rooms = await _dbContext.Rooms
                     .Where(r => roomIds.Contains(r.RoomID))
+                    .Include(r => r.Amenities)
+                    .Include(r => r.RoomImages)
                     .ToListAsync();
                 if (rooms.Count != roomIds.Count)
                 {
@@ -45,10 +65,6 @@ namespace back_end.Services
                 var services = await _dbContext.AdditionalServices
                     .Where(s => serviceIds.Contains(s.ServiceID))
                     .ToListAsync();
-                if (services.Count != serviceIds.Count)
-                {
-                    throw new ArgumentException($"Uno o più servizi non trovati");
-                }
 
                 var checkInDate = bookingRequest.CheckInDate;
                 var checkOutDate = bookingRequest.CheckOutDate;
