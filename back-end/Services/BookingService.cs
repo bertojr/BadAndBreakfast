@@ -24,21 +24,21 @@ namespace back_end.Services
         public async Task<Booking> Create(BookingRequest bookingRequest,
             List<int> roomIds, List<int> serviceIds)
         {
-            // recupero la claim dell'utente loggato
-            var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            // converto userIdClaim in un intero
-            var userId = userIdClaim != null ? int.Parse(userIdClaim) : (int?)null;
-
-            if(userId == null)
-            {
-                throw new UnauthorizedAccessException("Utente non autenticato");
-            }
-
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
+
+                // recupero la claim dell'utente loggato
+                var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                // converto userIdClaim in un intero
+                var userId = userIdClaim != null ? int.Parse(userIdClaim) : (int?)null;
+
+                if (userId == null)
+                {
+                    throw new UnauthorizedAccessException("Utente non autenticato");
+                }
 
                 // recupero l'utente
                 var user = await _dbContext.Users

@@ -9,7 +9,12 @@
   </div>
   <div class="col-md-1">
     <label>Ospiti</label>
-    <input type="number" class="form-control" [(ngModel)]="guests" />
+    <select class="form-select" [(ngModel)]="guests">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
   </div>
   <div class="col-md-2 d-flex align-items-end">
     <button class="btn btn-primary w-100" (click)="search()">Search</button>
@@ -34,7 +39,7 @@
     </ul>
   </div>
   <ng-template #noResults>
-    <p>{{ errorMessage }}</p>
+    <p [innerHTML]="errorMessage"></p>
   </ng-template>
 </div>
 

@@ -44,6 +44,7 @@ export class BookingsComponent {
     }
   }
   search() {
+    this.selectedRooms = [];
     this.bookingSvc.setDates(
       new Date(this.checkInDate),
       new Date(this.checkOutDate)

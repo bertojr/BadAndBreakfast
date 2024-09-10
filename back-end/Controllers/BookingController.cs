@@ -35,6 +35,10 @@ namespace back_end.Controllers
                     bookingRequest.ServiceIds);
                 return Ok(createdBooking);
             }
+            catch(UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
             catch (InvalidOperationException ex)
             {
                 return StatusCode(500, new { message = ex.Message });

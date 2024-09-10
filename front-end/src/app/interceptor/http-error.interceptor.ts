@@ -37,8 +37,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             }
             case 401: {
               errorMessage =
-                error.error?.message ||
-                'Non autorizzato. Per favore accedi di nuovo';
+                error.error?.message +
+                  ' Per favore <a href="/auth/login">effettua il login</a>' ||
+                'Non autorizzato. Per favore <a href="/auth/login">effettua il login</a>';
               break;
             }
             case 403: {
