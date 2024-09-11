@@ -24,29 +24,15 @@ namespace back_end.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                var createdAmenity = await _crudService.Create(newAmenity);
-                return Ok(createdAmenity);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var createdAmenity = await _crudService.Create(newAmenity);
+            return Ok(createdAmenity);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var amenities = await _crudService.GetAll();
-                return Ok(amenities);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var amenities = await _crudService.GetAll();
+            return Ok(amenities);
         }
 
         [HttpPut("{id}")]
@@ -57,55 +43,22 @@ namespace back_end.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                var editedAmenity = await _crudService.Edit(id, amenityUpdate);
-                return Ok(editedAmenity);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = $"Comodità con ID: {id} non trovato" });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var editedAmenity = await _crudService.Edit(id, amenityUpdate);
+            return Ok(editedAmenity);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                var amenity = await _crudService.GetById(id);
-                return Ok(amenity);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = $"Comodità con ID: {id} non trovata" });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var amenity = await _crudService.GetById(id);
+            return Ok(amenity);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _crudService.Delete(id);
-                return Ok(new { message = "Eliminazione avvenuta con successo" });
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = $"Comodità con ID: {id} non trovato" });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            await _crudService.Delete(id);
+            return Ok(new { message = "Eliminazione avvenuta con successo" });
         }
     }
 }

@@ -22,55 +22,22 @@ namespace back_end.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var users = await _userService.GetAll();
-                return Ok(users);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var users = await _userService.GetAll();
+            return Ok(users);
         }
 
         [HttpPost("{userId}/role/{roleId}")]
         public async Task<IActionResult> AddUserToRole(int userId, int roleId)
         {
-            try
-            {
-                var role = await _userService.AddRoleToUser(userId, roleId);
-                return Ok(role);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Errore interno del server.", details = ex.Message });
-            }
+            var role = await _userService.AddRoleToUser(userId, roleId);
+            return Ok(role);
         }
 
         [HttpDelete("{userId}/role/{roleId}")]
         public async Task<IActionResult> RemoveRoleFromUser(int userId, int roleId)
         {
-            try
-            {
-                await _userService.RemoveRoleFromUser(userId, roleId);
-                return Ok(new { message = "Ruolo rimosso con successo." });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Errore interno del server.", details = ex.Message });
-            }
+            await _userService.RemoveRoleFromUser(userId, roleId);
+            return Ok(new { message = "Ruolo rimosso con successo." });
         }
 
         [HttpPut("{id}")]
@@ -81,62 +48,23 @@ namespace back_end.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                var updatedUser = await _crudService.Edit(id, updateUser);
-                return Ok(updatedUser);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = $"Utente con ID: {id} non trovata" });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var updatedUser = await _crudService.Edit(id, updateUser);
+            return Ok(updatedUser);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                var user = await _userService.GetById(id);
-                return Ok(user);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new {message = $"Utente con ID {id} non trovato"});
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
-            catch (Exception)
-            {
-                // Altre eccezzioni non previste
-                return StatusCode(500, new { message = "Errore imprevisto." });
-            }
+            var user = await _userService.GetById(id);
+            return Ok(user);
         }
 
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _crudService.Delete(id);
-                return Ok(new { message = "Eliminazione avvenuta con successo" });
-            }
-
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = $"Utente con ID: {id} non trovato" });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            await _crudService.Delete(id);
+            return Ok(new { message = "Eliminazione avvenuta con successo" });
         }
     }
 }

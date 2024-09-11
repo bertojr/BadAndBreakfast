@@ -41,6 +41,7 @@ namespace back_end.Controllers
             return Ok(bookings);
         }
 
+        /*
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] BookingUpdateRequest updateRequest)
         {
@@ -55,7 +56,7 @@ namespace back_end.Controllers
                     updateRequest.RoomIds,
                     updateRequest.ServiceIds);
             return Ok(updatedBooking);
-        }
+        }*/
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

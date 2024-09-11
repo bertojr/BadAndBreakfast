@@ -23,32 +23,16 @@ namespace back_end.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                var createdService = await _crudService.Create(newService);
-                return Ok(createdService);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var createdService = await _crudService.Create(newService);
+            return Ok(createdService);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var services = await _crudService.GetAll();
-                return Ok(services);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var services = await _crudService.GetAll();
+            return Ok(services);
         }
-
-
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Edit(int id, [FromBody] DataModels.AdditionalService updateService)
@@ -58,55 +42,22 @@ namespace back_end.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                var editedService = await _crudService.Edit(id, updateService);
-                return Ok(editedService);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new {message = $"Servizio con ID: {id} non trovato" });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var editedService = await _crudService.Edit(id, updateService);
+            return Ok(editedService);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                var service = await _crudService.GetById(id);
-                return Ok(service);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = $"Servizio con ID: {id} non trovato" });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var service = await _crudService.GetById(id);
+            return Ok(service);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _crudService.Delete(id);
-                return Ok(new { message = "Eliminazione avvenuta con successo" });
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = $"Servizio con ID: {id} non trovato" });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            await _crudService.Delete(id);
+            return Ok(new { message = "Eliminazione avvenuta con successo" });
         }
     }
 }

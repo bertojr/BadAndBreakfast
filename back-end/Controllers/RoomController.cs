@@ -34,110 +34,50 @@ namespace back_end.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
+            var newRoom = new Room
             {
-                var newRoom = new Room
-                {
-                    Capacity = roomRequest.Capacity,
-                    Description = roomRequest.Description,
-                    IsAvailable = roomRequest.IsAvailable,
-                    Price = roomRequest.Price,
-                    RoomNumber = roomRequest.RoomNumber,
-                    RoomType = roomRequest.RoomType,
-                    size = roomRequest.size
-                };
+                Capacity = roomRequest.Capacity,
+                Description = roomRequest.Description,
+                IsAvailable = roomRequest.IsAvailable,
+                Price = roomRequest.Price,
+                RoomNumber = roomRequest.RoomNumber,
+                RoomType = roomRequest.RoomType,
+                size = roomRequest.size
+            };
 
-                var createdRoom = await _roomService.Create(
-                    newRoom,
-                    roomRequest.AmenitiesIds);
-                return Ok(createdRoom);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var createdRoom = await _roomService.Create(
+                newRoom,
+                roomRequest.AmenitiesIds);
+            return Ok(createdRoom);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                var rooms = await _roomService.GetAll();
-                return Ok(rooms);
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            var rooms = await _roomService.GetAll();
+            return Ok(rooms);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                var room = await _roomService.GetById(id);
-                return Ok(room);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = $"Utente con ID {id} non trovato" });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
-            catch (Exception)
-            {
-                // Altre eccezzioni non previste
-                return StatusCode(500, new { message = "Errore imprevisto." });
-            }
+            var room = await _roomService.GetById(id);
+            return Ok(room);
         }
 
 
         [HttpPost("{roomId}/amenity/{amenityId}")]
         public async Task<IActionResult> AddAmenityToRoom(int roomId, int amenityId)
         {
-            try
-            {
-                var amenity = await _roomService.AddAmenityToRoom(roomId, amenityId);
-                return Ok(amenity);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Errore interno del server.", details = ex.Message });
-            }
+            var amenity = await _roomService.AddAmenityToRoom(roomId, amenityId);
+            return Ok(amenity);
         }
 
         [HttpDelete("{roomId}/amenity/{amenityId}")]
         public async Task<IActionResult> RemoveAmenityFromRoom(int roomId, int amenityId)
         {
-            try
-            {
-                await _roomService.RemoveAmenityFromRoom(roomId, amenityId);
-                return Ok(new {message = "Rimozione avvenuta con successo"});
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Errore interno del server.", details = ex.Message });
-            }
+            await _roomService.RemoveAmenityFromRoom(roomId, amenityId);
+            return Ok(new { message = "Rimozione avvenuta con successo" });
         }
 
 
@@ -149,41 +89,17 @@ namespace back_end.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-
-               var updatedRoom = await _roomService.Update(
+            var updatedRoom = await _roomService.Update(
                     id,
                     updateRoom);
-                return Ok(updatedRoom);
-            }
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = $"Camera con ID: {id} non trovata" });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            return Ok(updatedRoom);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _crudService.Delete(id);
-                return Ok(new { message = "Eliminazione avvenuta con successo" });
-            }
-
-            catch (KeyNotFoundException)
-            {
-                return NotFound(new { message = $"Camera con ID: {id} non trovata" });
-            }
-            catch (InvalidOperationException ex)
-            {
-                return StatusCode(500, new { message = ex.Message });
-            }
+            await _crudService.Delete(id);
+            return Ok(new { message = "Eliminazione avvenuta con successo" });
         }
     }
 }

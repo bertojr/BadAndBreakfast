@@ -7,59 +7,50 @@ namespace back_end.Services
 	public class UserService : IUserService
 	{
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<UserService> _logger;
+        private readonly IServiceExceptionHandler _exceptionHandler;
 
         public UserService(ApplicationDbContext dbContext,
-            ILogger<UserService> logger)
+            IServiceExceptionHandler exceptionHandler)
         {
             _dbContext = dbContext;
-            _logger = logger;
+            _exceptionHandler = exceptionHandler;
         }
 
         public async Task<List<User>> GetAll()
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
                 return await _dbContext.Users
                     .Include(u => u.Roles)
                     .Include(u => u.Reviews)
                     .Include(u => u.Bookings)
                     .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore durante il recupero di tutti gli utenti");
-                throw new InvalidOperationException($"Non è stato possibile recuperare gli utenti, riprovare più tardi.", ex);
-            }
+            });
         }
 
-        public async Task<User> GetById(int id)
+        public async Task<User> GetById(int? id)
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
                 var user = await _dbContext.Users
                     .Include(u => u.Roles)
                     .Include(u => u.Reviews)
                     .Include(u => u.Bookings)
                     .FirstOrDefaultAsync(u => u.UserID == id);
-                if(user == null)
+                if (user == null)
                 {
                     throw new KeyNotFoundException($"Utente con ID {id} non trovato.");
                 }
 
                 return user;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore durante il recupero dell'utente con ID {id}");
-                throw;
-            }
+            });
         }
 
         public async Task<Role> AddRoleToUser(int userId, int roleId)
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
+                // recupero l'utente
                 var user = await _dbContext.Users
                     .Include(u => u.Roles)
                     .FirstOrDefaultAsync(u => u.UserID == userId);
@@ -69,6 +60,7 @@ namespace back_end.Services
                     throw new KeyNotFoundException($"Utente con ID {userId} non trovato.");
                 }
 
+                // recupero il ruolo
                 var role = await _dbContext.Roles
                     .FirstOrDefaultAsync(r => r.RoleID == roleId);
 
@@ -87,22 +79,12 @@ namespace back_end.Services
                 await _dbContext.SaveChangesAsync();
 
                 return role;
-            }
-            catch (DbUpdateException dbEx)
-            {
-                _logger.LogError(dbEx, $"Errore durante l'aggiornamento dell'utente con ID {userId}.");
-                throw new InvalidOperationException($"Errore durante l'aggiornamento dell'utente, riprovare più tardi.", dbEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore generico durante l'aggiunta del ruolo all'utente con ID {userId}.");
-                throw;
-            }
+            });
         }
 
         public async Task RemoveRoleFromUser(int userId, int roleId)
         {
-            try
+            await _exceptionHandler.ExecuteAsync(async () =>
             {
                 var user = await _dbContext.Users
                     .Include(u => u.Roles)
@@ -124,17 +106,7 @@ namespace back_end.Services
                 user.Roles.Remove(role);
                 _dbContext.Users.Update(user);
                 await _dbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateException dbEx)
-            {
-                _logger.LogError(dbEx, $"Errore durante l'aggiornamento dell'utente con ID {userId}.");
-                throw new InvalidOperationException($"Errore durante l'aggiornamento dell'utente, riprovare più tardi.", dbEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore generico durante l'aggiunta del ruolo all'utente con ID {userId}.");
-                throw;
-            }
+            });
         }
 
         /*

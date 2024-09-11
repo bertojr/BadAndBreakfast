@@ -22,7 +22,7 @@ namespace back_end.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new {message = "Dati non validi"});
+                return BadRequest(ModelState);
             }
 
             var authResult = await _authService.Login(model.email, model.password);
@@ -40,20 +40,21 @@ namespace back_end.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new { message = "Dati non validi", errors = ModelState });
+                return BadRequest(ModelState);
             }
 
             var user = await _authService.Register(model);
 
             return Ok(user);
         }
-        
+
+        /*
         [HttpGet("prova")]
         [Authorize(Roles = "Admin")]
         public IActionResult prova()
         {
             return Ok(new { message = "This is protected data." });
-        }
+        }*/
     }
 }
 

@@ -8,18 +8,18 @@ namespace back_end.Services
 	public class RoomService : IRoomService
 	{
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<RoomService> _logger;
+        private readonly IServiceExceptionHandler _exceptionHandler;
 
-        public RoomService(ApplicationDbContext dbContext,
-            ILogger<RoomService> logger)
+        public RoomService(ApplicationDbContext dbContext, IServiceExceptionHandler exceptionHandler)
         {
             _dbContext = dbContext;
-            _logger = logger;
+            _exceptionHandler = exceptionHandler;
         }
 
+        // creazione nuova camera con le comodità associate
         public async Task<Room> Create(Room newRoom, List<int> amenitiesIds)
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
                 List<Amenity> amenities = new List<Amenity>();
                 if (amenitiesIds != null && amenitiesIds.Any())
@@ -40,38 +40,25 @@ namespace back_end.Services
                 await _dbContext.SaveChangesAsync();
 
                 return newRoom;
-            }
-            catch (DbUpdateException dbEx)
-            {
-                _logger.LogError(dbEx, $"Errore durante la creazione della camera");
-                throw new InvalidOperationException($"Non è stato possibile creare la camera, riprovare più tardi.", dbEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore generico durante la creazione della camera");
-                throw;
-            }
+            });
         }
 
+
+        // recupero tutte le camere
         public async Task<List<Room>> GetAll()
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
                 return await _dbContext.Rooms
                     .Include(r => r.Amenities)
                     .Include(r => r.RoomImages)
                     .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore durante il recupero di tutte le camere");
-                throw new InvalidOperationException($"Non è stato possibile recuperare le camere, riprovare più tardi.", ex);
-            }
+            });
         }
 
         public async Task<Room> GetById(int id)
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
                 var room = await _dbContext.Rooms
                     .Include(r => r.RoomImages)
@@ -83,35 +70,27 @@ namespace back_end.Services
                 }
 
                 return room;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore durante il recupero della camera con ID {id}");
-                throw;
-            }
+            });
         }
 
         public async Task<Amenity> AddAmenityToRoom(int roomId, int amenityId)
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
-                var room = await _dbContext.Rooms
-                    .Include(r => r.Amenities)
-                    .FirstOrDefaultAsync(r => r.RoomID == roomId);
+                // recupero la camera
+                var room = await GetById(roomId);
 
-                if (room == null)
-                {
-                    throw new KeyNotFoundException($"Camera con ID {roomId} non trovata.");
-                }
-
+                // recupero la comodità da aggiungere
                 var amenity = await _dbContext.Amenities
                     .FirstOrDefaultAsync(a => a.AmenityID == amenityId);
 
+                // controllo che la comodità con id sia presente
                 if (amenity == null)
                 {
                     throw new KeyNotFoundException($"Comodità con ID {amenityId} non trovata.");
                 }
 
+                // controllo che non sia gia presente una comodità
                 if (room.Amenities.Any(a => a.AmenityID == amenityId))
                 {
                     throw new InvalidOperationException($"Comodità: {amenity.Name} già presenta nella camera {room.RoomNumber}");
@@ -122,35 +101,22 @@ namespace back_end.Services
                 await _dbContext.SaveChangesAsync();
 
                 return amenity;
-            }
-            catch (DbUpdateException dbEx)
-            {
-                _logger.LogError(dbEx, $"Errore durante l'aggiornamento della camera con ID {roomId}.");
-                throw new InvalidOperationException($"Errore durante l'aggiornamento della camera, riprovare più tardi.", dbEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore generico durante l'aggiunta della comodità alla camera con ID {roomId}.");
-                throw;
-            }
+            });
+
         }
 
         public async Task RemoveAmenityFromRoom(int roomId, int amenityId)
         {
-            try
+            await _exceptionHandler.ExecuteAsync(async () =>
             {
-                var room = await _dbContext.Rooms
-                    .Include(r => r.Amenities)
-                    .FirstOrDefaultAsync(r => r.RoomID == roomId);
+                // recupero la camera
+                var room = await GetById(roomId);
 
-                if (room == null)
-                {
-                    throw new KeyNotFoundException($"Camera con ID {roomId} non trovata.");
-                }
-
+                // recupero la comodità da dissociare
                 var amenity = await _dbContext.Amenities
                     .FirstOrDefaultAsync(a => a.AmenityID == amenityId);
 
+                // controllo che la comodità con quell'id esista
                 if (amenity == null)
                 {
                     throw new KeyNotFoundException($"Comodità con ID {amenityId} non trovata.");
@@ -159,33 +125,17 @@ namespace back_end.Services
                 room.Amenities.Remove(amenity);
                 _dbContext.Rooms.Update(room);
                 await _dbContext.SaveChangesAsync();
-            }
-            catch (DbUpdateException dbEx)
-            {
-                _logger.LogError(dbEx, $"Errore durante l'aggiornamento della camera con ID {roomId}.");
-                throw new InvalidOperationException($"Errore durante l'aggiornamento della camera, riprovare più tardi.", dbEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore generico durante l'aggiunta della comodità alla camera con ID {roomId}.");
-                throw;
-            }
+            });
         }
 
         public async Task<Room> Update(int id, Room updateRoom)
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
-                var existingRoom = await _dbContext.Rooms
-                    .Include(r => r.Amenities)
-                    .Include(r => r.RoomImages)
-                    .FirstOrDefaultAsync(r => r.RoomID == id);
+                // recupero la camera che voglio modificare
+                var existingRoom = await GetById(id);
 
-                if (existingRoom == null)
-                {
-                    throw new KeyNotFoundException($"Camera con ID {id} non trovata");
-                }
-
+                // aggiorno ogni propietà
                 existingRoom.Capacity = updateRoom.Capacity;
                 existingRoom.Description = updateRoom.Description;
                 existingRoom.IsAvailable = updateRoom.IsAvailable;
@@ -198,18 +148,9 @@ namespace back_end.Services
                 await _dbContext.SaveChangesAsync();
 
                 return existingRoom;
-            }
-            catch (DbUpdateException dbEx)
-            {
-                _logger.LogError(dbEx, $"Errore durante l'aggiornamento della camera");
-                throw new InvalidOperationException($"Non è stato possibile aggiornare la camera, riprovare più tardi.", dbEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore generico durante la camera della prenotazione");
-                throw;
-            }
+            });
         }
+
     }
 }
 

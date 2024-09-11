@@ -9,19 +9,21 @@ namespace back_end.Services
 	public class BookingService : IBookingService
 	{
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<BookingService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IServiceExceptionHandler _exceptionHandler;
+        private readonly IUserService _userService;
 
         public BookingService(ApplicationDbContext dbContext,
-            ILogger<BookingService> logger, IHttpContextAccessor httpContextAccessor, IServiceExceptionHandler exceptionHandler)
+            IHttpContextAccessor httpContextAccessor,
+            IServiceExceptionHandler exceptionHandler, IUserService userService)
         {
             _dbContext = dbContext;
-            _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _exceptionHandler = exceptionHandler;
+            _userService = userService;
         }
 
+        // Nuova prenotazione
         public async Task Create(BookingRequest bookingRequest,
             List<int> roomIds, List<int> serviceIds)
         {
@@ -41,14 +43,7 @@ namespace back_end.Services
                 }
 
                 // recupero l'utente
-                var user = await _dbContext.Users
-                    .Include(u => u.Roles)
-                    .Include(u => u.Reviews)
-                    .FirstOrDefaultAsync(u => u.UserID == userId.Value);
-                if (user == null)
-                {
-                    throw new ArgumentException($"Utente con ID {userId} non trovato");
-                }
+                var user = await _userService.GetById(userId);
 
                 // recupero le camere
                 var rooms = await _dbContext.Rooms
@@ -108,6 +103,8 @@ namespace back_end.Services
             
         }
 
+
+        /*
         public async Task<Booking> Update(int bookingId, BookingUpdateRequest updateRequest,
             List<int> roomIds, List<int> serviceIds)
         {
@@ -190,28 +187,28 @@ namespace back_end.Services
                 _logger.LogError(ex, $"Errore generico durante la prenotazione della prenotazione");
                 throw;
             }
-        }
+        }*/
 
+        // recupero tutte le prenotazioni nel db
         public async Task<List<Booking>> GetAll()
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
-                return await _dbContext.Bookings
+               return await _dbContext.Bookings
                     .Include(b => b.Rooms)
                     .Include(b => b.AdditionalServices)
                     .Include(b => b.User)
                     .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore durante il recupero di tutte le prenotazioni");
-                throw new InvalidOperationException($"Non è stato possibile recuperare le prenotazioni, riprovare più tardi.", ex);
-            }
+            });
         }
 
+
+        // recupero tutte le camera disponibili in una certa data
         public async Task<List<Room>> GetAvailableRooms (DateOnly checkInDate, DateOnly checkOutDate)
         {
-            var availableRooms = await _dbContext.Rooms
+            return await _exceptionHandler.ExecuteAsync(async () =>
+            {
+                var availableRooms = await _dbContext.Rooms
                     .Where(r => !r.Bookings
                     .Any(b => b.CheckInDate < checkOutDate && b.CheckOutDate > checkInDate))
                     .Where(r => r.IsAvailable == true)
@@ -219,12 +216,13 @@ namespace back_end.Services
                     .Include(r => r.Amenities)
                     .ToListAsync();
 
-            if (availableRooms.Count == 0)
-            {
-                throw new KeyNotFoundException("Nessuna camera disponibile per la data selezionata");
-            }
+                if (availableRooms.Count == 0)
+                {
+                    throw new KeyNotFoundException("Nessuna camera disponibile per la data selezionata");
+                }
 
-            return availableRooms;
+                return availableRooms;
+            }); 
         }
     }
 }

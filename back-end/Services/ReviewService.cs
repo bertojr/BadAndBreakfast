@@ -1,7 +1,6 @@
-﻿using System;
+﻿using System.Security.Claims;
 using back_end.DataModels;
 using back_end.Interfaces;
-using back_end.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace back_end.Services
@@ -9,56 +8,57 @@ namespace back_end.Services
 	public class ReviewService : IReviewService
 	{
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<ReviewService> _logger;
+        private readonly IServiceExceptionHandler _exceptionHandler;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserService _userService;
 
         public ReviewService(ApplicationDbContext dbContext,
-            ILogger<ReviewService> logger)
+            IServiceExceptionHandler exceptionHandler,
+            IHttpContextAccessor httpContextAccessor, IUserService userService)
         {
             _dbContext = dbContext;
-            _logger = logger;
+            _exceptionHandler = exceptionHandler;
+            _httpContextAccessor = httpContextAccessor;
+            _userService = userService;
         }
 
-        public async Task<Review> Create(int? userId, Review newReview)
+        // creazione nuova recensione
+        public async Task<Review> Create(Review newReview)
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
-                // recupero l'utente
-                var user = await _dbContext.Users.FindAsync(userId);
+                // recupero la claim dell'utente loggato
+                var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                newReview.User = user;
+                // converto userIdClaim in un intero
+                var userId = userIdClaim != null ? int.Parse(userIdClaim) : (int?)null;
+
+                // recupero l'utente
+                var user = userId == null ? null : await _userService.GetById(userId);
+
+                newReview.User = user == null ? null : user;
 
                 await _dbContext.Reviews.AddAsync(newReview);
                 await _dbContext.SaveChangesAsync();
 
                 return newReview;
-            }
-            catch (DbUpdateException dbEx)
-            {
-                _logger.LogError(dbEx, $"Errore durante la creazione della recensione");
-                throw new InvalidOperationException($"Non è stato possibile creare la recensione, riprovare più tardi.", dbEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore generico durante la creazione della recensione");
-                throw;
-            }
+            });
         }
 
+        // recupero tutte le recensioni
         public async Task<List<Review>> GetAll()
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
                 return await _dbContext.Reviews
                     .Include(r => r.User)
                     .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore durante il recupero di tutte le recensioni");
-                throw new InvalidOperationException($"Non è stato possibile recuperare le recensioni, riprovare più tardi.", ex);
-            }
+            });
         }
 
+
+        /*
+        // eseguo la modifica di una recensione
         public async Task<Review> Update(int id, Review updateReview)
         {
             try
@@ -91,7 +91,7 @@ namespace back_end.Services
                 _logger.LogError(ex, $"Errore generico durante l'aggiornamento della recensione");
                 throw;
             }
-        }
+        }*/
     }
 }
 
