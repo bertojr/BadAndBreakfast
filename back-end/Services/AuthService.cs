@@ -15,19 +15,20 @@ namespace back_end.Services
 	{
         private readonly JwtSettings _jwtSettings; // contiene le impostazione JWT
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<AuthService> _logger;
+        private readonly IServiceExceptionHandler _exceptionHandler;
 
 		public AuthService(IOptions<JwtSettings> jwtSettings,
-            ApplicationDbContext dbContext, ILogger<AuthService> logger)
+            ApplicationDbContext dbContext,
+            IServiceExceptionHandler exceptionHandler)
 		{
             _jwtSettings = jwtSettings.Value;
             _dbContext = dbContext;
-            _logger = logger;
+            _exceptionHandler = exceptionHandler;
 		}
 
         public async Task<AuthResult> Login(string email, string password)
         {
-            try
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
                 var user = await _dbContext.Users
                     .AsNoTracking()
@@ -36,20 +37,12 @@ namespace back_end.Services
 
                 if (user == null)
                 {
-                    return new AuthResult
-                    {
-                        IsSuccess = false,
-                        ErrorMessage = "Email non trovata"
-                    };
+                    throw new ArgumentException("Email non trovata");
                 }
 
                 if (!VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
                 {
-                    return new AuthResult
-                    {
-                        IsSuccess = false,
-                        ErrorMessage = "Password errata"
-                    };
+                    throw new ArgumentException("Password errata");
                 }
 
                 // creazione e gestione dei token JWT
@@ -94,40 +87,22 @@ namespace back_end.Services
                 // restituisco il bearer token e l'utente connesso
                 return new AuthResult
                 {
-                    IsSuccess = true,
                     Token = jwtToken,
                     User = user
                 };
-            }
-            catch (DbUpdateException dbEx)
-            {
-                _logger.LogError(dbEx, "Errore nel database durante il login");
-                return new AuthResult
-                {
-                    IsSuccess = false,
-                    ErrorMessage = "Errore interno del server"
-                };
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex, "Errore interno del server");
-                return new AuthResult
-                {
-                    IsSuccess = false,
-                    ErrorMessage = "Errore interno del server"
-                };
-            }
+            });
+
         }
 
-        public async Task<(User user, string errorMessage)> Register(RegisterModel model)
+        public async Task<User> Register(RegisterModel model)
         {
-            if(await _dbContext.Users.AnyAsync(u => u.Email == model.Email))
+            return await _exceptionHandler.ExecuteAsync(async () =>
             {
-                return (null, "Email già in uso");
-            }
+                if (await _dbContext.Users.AnyAsync(u => u.Email == model.Email))
+                {
+                    throw new ArgumentException("Email già in uso");
+                }
 
-            try
-            {
                 // creo l'hash e il salt della password
                 var (hash, salt) = HashPassword(model.Password);
 
@@ -144,20 +119,14 @@ namespace back_end.Services
                     Country = model.Country,
                     Address = model.Address,
                     City = model.City,
-                    CAP = model.CAP       
+                    CAP = model.CAP
                 };
 
                 await _dbContext.Users.AddAsync(newUser);
                 await _dbContext.SaveChangesAsync();
 
-                return (newUser, null);
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex, "Errore durante la registrazione dell'utente");
-                return (null, "Errore durante la registrazione dell'utente");
-            }
-
+                return newUser;
+            });
         }
 
         // metodo privato per generare hash e salt della password

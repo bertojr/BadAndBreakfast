@@ -10,20 +10,13 @@
   <div class="container">
     <div class="row">
       <div class="col-md-4 mb-4">
-        <div class="card">
-          <img
-            src="https://placehold.co/400"
-            class="card-img-top"
-            alt="Camera Panorama"
-          />
+        <div class="card" *ngFor="let room of rooms">
+          <img src="https://placehold.co/400" class="card-img-top" alt="" />
           <div class="card-body">
-            <h5 class="card-title">Camera Panorama</h5>
+            <h5 class="card-title">{{ room.roomNumber }}</h5>
             <p class="card-text">
-              Camera con vista sulle montagne, letto matrimoniale e bagno
-              privato.
+              {{ room.description }}
             </p>
-            <p class="card-text">Prezzo: €100/notte</p>
-            <a routerLink="/book" class="btn btn-primary">Prenota</a>
           </div>
         </div>
       </div>
@@ -34,16 +27,11 @@
 
 <section class="room-details py-5">
   <div class="container">
-    <h2>Dettagli della Camera Panorama</h2>
+    <h2></h2>
     <p>
       Descrizione completa della stanza con tutte le caratteristiche: TV, Wi-Fi,
       vista, ecc.
     </p>
-    <div class="tabs d-flex">
-      <button class="btn btn-primary me-2">Foto Extra</button>
-      <button class="btn btn-primary me-2">Recensioni</button>
-      <button class="btn btn-primary">Servizi Inclusi</button>
-    </div>
     <!-- Contenuto delle schede -->
   </div>
 </section>

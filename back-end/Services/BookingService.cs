@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using back_end.DataModels;
 using back_end.Interfaces;
 using back_end.Models;
@@ -12,22 +11,23 @@ namespace back_end.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<BookingService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IServiceExceptionHandler _exceptionHandler;
 
         public BookingService(ApplicationDbContext dbContext,
-            ILogger<BookingService> logger, IHttpContextAccessor httpContextAccessor)
+            ILogger<BookingService> logger, IHttpContextAccessor httpContextAccessor, IServiceExceptionHandler exceptionHandler)
         {
             _dbContext = dbContext;
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _exceptionHandler = exceptionHandler;
         }
 
-        public async Task<Booking> Create(BookingRequest bookingRequest,
+        public async Task Create(BookingRequest bookingRequest,
             List<int> roomIds, List<int> serviceIds)
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
-
-            try
+            await _exceptionHandler.ExecuteAsync(async () =>
             {
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
                 // recupero la claim dell'utente loggato
                 var userIdClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -45,7 +45,7 @@ namespace back_end.Services
                     .Include(u => u.Roles)
                     .Include(u => u.Reviews)
                     .FirstOrDefaultAsync(u => u.UserID == userId.Value);
-                if(user == null)
+                if (user == null)
                 {
                     throw new ArgumentException($"Utente con ID {userId} non trovato");
                 }
@@ -69,7 +69,7 @@ namespace back_end.Services
                 var checkInDate = bookingRequest.CheckInDate;
                 var checkOutDate = bookingRequest.CheckOutDate;
 
-                if(checkOutDate <= checkInDate)
+                if (checkOutDate <= checkInDate)
                 {
                     throw new ArgumentException("La data di check-out deve " +
                         "essere successiva alla data di check-in");
@@ -104,18 +104,8 @@ namespace back_end.Services
                 await _dbContext.SaveChangesAsync();
 
                 await transaction.CommitAsync();
-                return newBooking;
-            }
-            catch (DbUpdateException dbEx)
-            {
-                _logger.LogError(dbEx, $"Errore durante la creazione della prenotazione");
-                throw new InvalidOperationException($"Non è stato possibile creare la prenotazione, riprovare più tardi.", dbEx);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Errore generico durante la creazione della prenotazione");
-                throw;
-            }
+            });
+            
         }
 
         public async Task<Booking> Update(int bookingId, BookingUpdateRequest updateRequest,
@@ -221,9 +211,7 @@ namespace back_end.Services
 
         public async Task<List<Room>> GetAvailableRooms (DateOnly checkInDate, DateOnly checkOutDate)
         {
-            try
-            {
-                var availableRooms = await _dbContext.Rooms
+            var availableRooms = await _dbContext.Rooms
                     .Where(r => !r.Bookings
                     .Any(b => b.CheckInDate < checkOutDate && b.CheckOutDate > checkInDate))
                     .Where(r => r.IsAvailable == true)
@@ -231,18 +219,12 @@ namespace back_end.Services
                     .Include(r => r.Amenities)
                     .ToListAsync();
 
-                if(availableRooms.Count == 0)
-                {
-                    throw new KeyNotFoundException("Nessuna camera disponibile per la data selezionata");
-                }
-
-                return availableRooms;
-            }
-            catch (Exception ex)
+            if (availableRooms.Count == 0)
             {
-                _logger.LogError(ex, $"Errore durante il recupero delle camere disponibili");
-                throw;
+                throw new KeyNotFoundException("Nessuna camera disponibile per la data selezionata");
             }
+
+            return availableRooms;
         }
     }
 }

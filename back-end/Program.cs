@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using System.Text.Json.Serialization;
 using back_end.DataModels;
 using back_end.Interfaces;
+using back_end.middleware;
 using back_end.Models;
 using back_end.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -70,6 +70,7 @@ builder.Services
     .AddScoped<IUserService, UserService>()
     .AddScoped<IReviewService, ReviewService>()
     .AddScoped<IRoomService, RoomService>()
+    .AddSingleton<IServiceExceptionHandler, ServiceExceptionHandler>()
     .AddScoped(typeof(ICrudService<>), typeof(CrudService<>));
 
 var app = builder.Build();
@@ -81,6 +82,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
 
 // Abilita CORS

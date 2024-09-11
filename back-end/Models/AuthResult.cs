@@ -6,8 +6,6 @@ namespace back_end.Models
 	{
 		public string Token { get; set; }
         public User User { get; set; }
-		public string ErrorMessage { get; set; }
-		public bool IsSuccess { get; set; }
     }
 }
 
