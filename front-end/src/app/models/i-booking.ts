@@ -1,9 +1,9 @@
 import { iAdditionalService } from './i-additional-service';
+import { iRoom } from './i-room';
 import { iUser } from './i-user';
 
 export interface iBooking {
-  /*
-  id: number;
+  bookingID: number;
   checkInDate: string;
   checkOutDate: string;
   totalPrice: number;
@@ -14,5 +14,5 @@ export interface iBooking {
   specialRequest?: string;
   user: iUser;
   rooms: iRoom[];
-  additionalService: iAdditionalService[];*/
+  additionalServices: iAdditionalService[];
 }
