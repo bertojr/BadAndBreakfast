@@ -1,0 +1,37 @@
+<div
+  class="hero text-center text-white d-flex align-items-center justify-content-center"
+>
+  <div class="hero-text">
+    <h1>Le Nostre Camere</h1>
+  </div>
+</div>
+
+<section class="rooms py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card" *ngFor="let room of rooms">
+          <img src="https://placehold.co/400" class="card-img-top" alt="" />
+          <div class="card-body">
+            <h5 class="card-title">{{ room.roomNumber }}</h5>
+            <p class="card-text">
+              {{ room.description }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- altre camere qui -->
+    </div>
+  </div>
+</section>
+
+<section class="room-details py-5">
+  <div class="container">
+    <h2></h2>
+    <p>
+      Descrizione completa della stanza con tutte le caratteristiche: TV, Wi-Fi,
+      vista, ecc.
+    </p>
+    <!-- Contenuto delle schede -->
+  </div>
+</section>

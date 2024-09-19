@@ -1,0 +1,71 @@
+<div class="modal-header">
+  <h4 class="modal-title">
+    {{
+      service.serviceID
+        ? "Modifica servizio aggiuntivo"
+        : "Crea nuovo servizio aggiuntivo"
+    }}
+  </h4>
+  <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <div class="form-group">
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="service.name"
+        #name="ngModel"
+        placeholder="Nome"
+        class="form-control"
+        required
+      />
+      <div *ngIf="name.invalid && name.touched" class="text-danger">
+        Nome del servizio obbligatorio
+      </div>
+    </div>
+
+    <div class="form-group">
+      <input
+        type="number"
+        name="unitPrice"
+        [(ngModel)]="service.unitPrice"
+        #unitPrice="ngModel"
+        placeholder="Prezzo unitario"
+        class="form-control"
+        required
+      />
+      <div *ngIf="name.invalid && name.touched" class="text-danger">
+        Prezzo del servizio obbligatorio
+      </div>
+    </div>
+
+    <div class="form-group mt-3">
+      <textarea
+        class="form-control"
+        #description="ngModel"
+        name="description"
+        [(ngModel)]="service.description"
+        placeholder="Descrizione"
+      ></textarea>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+      {{ errorMessage }}
+    </div>
+
+    <button
+      type="submit"
+      class="btn btn-primary mt-3"
+      [disabled]="form.invalid"
+    >
+      {{
+        service.serviceID
+          ? "Modifica servizio aggiuntivo"
+          : "Aggiungi servizio aggiuntivo"
+      }}
+    </button>
+  </form>
+</div>

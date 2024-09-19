@@ -1,0 +1,48 @@
+<div class="modal-header">
+  <h4 class="modal-title">
+    {{ amenity.amenityID ? "Modifica comodità" : "Crea nuova comodità" }}
+  </h4>
+  <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <div class="form-group">
+      <input
+        type="text"
+        name="name"
+        [(ngModel)]="amenity.name"
+        #name="ngModel"
+        placeholder="Nome"
+        class="form-control"
+        required
+      />
+      <div *ngIf="name.invalid && name.touched" class="text-danger">
+        Nome obbligatorio
+      </div>
+    </div>
+
+    <div class="form-group mt-3">
+      <textarea
+        class="form-control"
+        #description="ngModel"
+        name="description"
+        [(ngModel)]="amenity.description"
+        placeholder="Descrizione"
+      ></textarea>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+      {{ errorMessage }}
+    </div>
+
+    <button
+      type="submit"
+      class="btn btn-primary mt-3"
+      [disabled]="form.invalid"
+    >
+      {{ amenity.amenityID ? "Modifica comodità" : "Aggiungi comodità" }}
+    </button>
+  </form>
+</div>

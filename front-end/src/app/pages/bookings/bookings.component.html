@@ -1,0 +1,67 @@
+<div class="row">
+  <div class="col-md-2">
+    <label>Check-in Date</label>
+    <input type="date" class="form-control" [(ngModel)]="checkInDate" />
+  </div>
+  <div class="col-md-2">
+    <label>Check-out Date</label>
+    <input type="date" class="form-control" [(ngModel)]="checkOutDate" />
+  </div>
+  <div class="col-md-1">
+    <label>Ospiti</label>
+    <select class="form-select" [(ngModel)]="guests">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+  </div>
+  <div class="col-md-2 d-flex align-items-end">
+    <button class="btn btn-primary w-100" (click)="search()">Search</button>
+  </div>
+</div>
+
+<div *ngIf="checkInDate && checkOutDate">
+  <div *ngIf="!errorMessage; else noResults">
+    <ul>
+      <li *ngFor="let room of availableRooms">
+        {{ room.roomNumber }}
+        <br />
+        {{ room.capacity }}
+        <br />
+        {{ room.size }}
+        <br />
+        {{ room.price | currency }}
+        <button class="btn btn-primary" (click)="toogleSelection(room)">
+          {{ !isSelected(room.roomID) ? "Scegli" : "Annulla" }}
+        </button>
+      </li>
+    </ul>
+  </div>
+  <ng-template #noResults>
+    <p [innerHTML]="errorMessage"></p>
+  </ng-template>
+</div>
+
+<div class="details-box">
+  <div *ngIf="selectedRooms.length > 0; else noRoomsSelected">
+    <div *ngFor="let room of selectedRooms">
+      <h3>{{ room.roomNumber }}</h3>
+      <br />
+      <p>{{ checkInDateFormatted + "->" + checkOutDateFormatted }}</p>
+    </div>
+    <p>Numero di stanze | {{ getTotalRooms() }}</p>
+    <p>Prezzo giornaliero -> {{ getDailyPrice() }}</p>
+    <p>Numero di notti -> {{ getNumberOfNights() }}</p>
+    <p>Totale {{ getTotal() }}</p>
+
+    <button (click)="toBook()" class="btn btn-warning">Prenota ora</button>
+  </div>
+  <ng-template #noRoomsSelected>
+    <p>Numero di stanze | -</p>
+    <p>Prezzo giornaliero | -</p>
+    <p>Numero di notti | -</p>
+    <p>Totale | -</p>
+    <button disabled class="btn btn-warning">Prenota ora</button>
+  </ng-template>
+</div>

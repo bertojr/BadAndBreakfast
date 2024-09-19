@@ -1,0 +1,108 @@
+<!-- Hero Section -->
+<header class="hero">
+  <div class="container text-center text-white">
+    <h1 class="display-3">Hello. Salut. Hola</h1>
+    <p class="lead">
+      Our Hotels & Resorts remain stylish, modern, and forward-thinking.
+    </p>
+    <a href="#" class="btn btn-primary btn-lg">More Info</a>
+  </div>
+</header>
+
+<!-- Booking Form Section -->
+<section class="booking-section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10">
+        <div class="booking-form bg-dark text-white p-4 rounded">
+          <div class="row">
+            <div class="col-md-3">
+              <label>Check-in Date</label>
+              <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="checkInDate"
+              />
+            </div>
+            <div class="col-md-3">
+              <label>Check-out Date</label>
+              <input
+                type="date"
+                class="form-control"
+                [(ngModel)]="checkOutDate"
+              />
+            </div>
+            <!--
+            <div class="col-md-2">
+              <label>Adults</label>
+              <select class="form-control">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+              </select>
+            </div> -->
+            <div class="col-md-2 d-flex align-items-end">
+              <button class="btn btn-primary w-100" (click)="search()">
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <img
+          src="https://via.placeholder.com/400x300"
+          class="img-fluid rounded"
+          alt="Hotel View"
+        />
+      </div>
+      <div class="col-md-6 d-flex flex-column justify-content-center">
+        <h2>Welcome to Luviana Hotel Resort</h2>
+        <p>
+          The Hotel Luviana is the right choice for visitors who are searching
+          for a combination of charm and a convenient position to explore
+          surroundings.
+        </p>
+        <a href="#" class="btn btn-outline-primary">Read More</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Amenities Section -->
+<section class="amenities-section py-5 bg-light">
+  <div class="container">
+    <h2 class="text-center">Our Amenities</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <ul>
+          <li><i class="fas fa-swimming-pool"></i> Swimming Pool</li>
+          <li><i class="fas fa-spa"></i> Spa & Massage</li>
+          <li><i class="fas fa-surf"></i> Surfing Lessons</li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <ul>
+          <li><i class="fas fa-dumbbell"></i> Gym & Yoga</li>
+          <li><i class="fas fa-ship"></i> Boat Tours</li>
+          <li><i class="fas fa-snorkel"></i> Diving & Snorkeling</li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <ul>
+          <li><i class="fas fa-beach"></i> Private Beach</li>
+          <li><i class="fas fa-conference"></i> Conference Room</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

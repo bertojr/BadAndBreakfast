@@ -1,0 +1,21 @@
+/* contact.component.css */
+.map iframe {
+  border: 0;
+}
+
+.contact-form input, .contact-form textarea {
+  border-radius: 5px;
+}
+
+.contact-info, .directions {
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
