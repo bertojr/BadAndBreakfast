@@ -1,11 +1,58 @@
 .welcome-section {
-  padding: 4rem 0;
+  padding: 5rem 0; /* Maggiore padding per allungare la sezione */
+  background-color: #f8f9fa; /* Sfondo chiaro per risalto */
+  border-radius: 15px; /* Bordo arrotondato */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Ombra per profondità */
+  width: 75%;
 }
 
 .welcome-section h2 {
-  font-size: 2.5rem;
+  font-size: 3rem; /* Dimensione maggiore per il titolo principale */
+  color: #dc3545; /* Colore accattivante */
+  margin-bottom: 1.5rem; /* Margine per distacco dal paragrafo */
+}
+
+.welcome-title {
+  display: block; /* Mostra come blocco per il maiuscolo */
+  font-weight: bold; /* Grassetto per il titolo */
+}
+
+.welcome-subtitle {
+  font-size: 1.5rem; /* Dimensione ridotta per il sottotitolo */
+  font-weight: normal; /* Normale per il sottotitolo */
+  color: #333; /* Colore scuro per il sottotitolo */
+}
+
+.divider {
+  width:65%;
+  height: 5px;
+  background-color: #dc3545; /* Colore della linea */
+  margin: 1.5rem auto; /* Centrato */
+  border-radius: 5px; /* Angoli arrotondati */
 }
 
 .welcome-section p {
   font-size: 1.2rem;
+  color: #333; /* Colore scuro per il testo */
+  line-height: 1.6; /* Maggiore spazio tra le righe */
+  max-width: 600px; /* Larghezza massima per leggibilità */
+  margin: 70px auto 45px auto; /* Centrato */
+}
+
+.welcome-section strong {
+  color: #dc3545; /* Colore accattivante per il testo in grassetto */
+  font-weight: bold; /* Grassetto per il testo importante */
+}
+
+.btn {
+  padding: 12px 24px; /* Maggiore padding per un pulsante più grande */
+  font-size: 1.1rem; /* Dimensione del testo del pulsante */
+  border-radius: 30px; /* Angoli arrotondati per il pulsante */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Transizione al passaggio del mouse */
+  margin-top: 2rem; /* Maggiore distacco dal testo */
+}
+
+.btn:hover {
+  background-color: #e63946; /* Cambia colore su hover */
+  transform: translateY(-3px); /* Effetto elevazione su hover */
 }
