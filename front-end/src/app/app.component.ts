@@ -8,7 +8,7 @@ import { AuthService } from './auth/auth.service';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'front-end';
+  title = "Berto's Apartments";
 
   user: any | null = null;
 

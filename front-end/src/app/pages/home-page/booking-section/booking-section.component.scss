@@ -1,0 +1,83 @@
+/* Booking Form Section */
+.booking-section {
+  background-color: #dc3545; /* Sfondo rosso per la sezione principale */
+  padding: 30px 0; /* Ridotto padding verticale */
+}
+
+h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem; /* Dimensione del titolo ridotta */
+  font-weight: bold;
+  color: #fff; /* Colore del titolo bianco */
+  text-transform: uppercase;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Ombra per il titolo */
+}
+
+.booking-form-container {
+  position: relative;
+  padding: 20px; /* Ridotto padding interno */
+  border-radius: 15px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); /* Ombra per l'intera sezione */
+}
+
+.booking-form {
+  background-color: #fff; /* Sfondo bianco per il form */
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+}
+
+.form-label {
+  font-size: 1rem; /* Dimensione del testo ridotta */
+  font-weight: bold;
+  color: #000; /* Colore scuro per le etichette */
+  margin-bottom: 5px; /* Margine ridotto */
+}
+
+.input-modern {
+  border: 2px solid #dc3545; /* Bordo rosso */
+  border-radius: 10px;
+  padding: 8px; /* Ridotto padding */
+  font-size: 0.9rem; /* Dimensione del testo ridotta */
+  transition: all 0.3s ease-in-out;
+}
+
+.input-modern:focus {
+  border-color: #000; /* Bordo nero su focus */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Ombra su focus */
+}
+
+.btn-modern-booking {
+  padding: 10px; /* Ridotto padding */
+  font-size: 1rem; /* Dimensione del testo ridotta */
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  background-color: #dc3545; /* Rosso per il pulsante */
+  color: #fff; /* Testo bianco */
+  border: none;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Ombra del pulsante */
+}
+
+.btn-modern-booking:hover {
+  background-color: #000; /* Cambia a nero su hover */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6); /* Ombra più intensa su hover */
+  transform: translateY(-3px); /* Leggera elevazione */
+}
+
+@media (max-width: 768px) {
+  .booking-form {
+    padding: 15px; /* Ridotto padding per schermi piccoli */
+  }
+
+  .input-modern {
+    font-size: 0.8rem; /* Dimensione del testo ulteriormente ridotta */
+  }
+
+  .btn-modern-booking {
+    font-size: 0.9rem; /* Dimensione del testo del pulsante ridotta */
+  }
+}
+
+
+

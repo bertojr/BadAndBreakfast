@@ -1,31 +1,30 @@
 <!-- Booking Form Section -->
-<section class="booking-section py-5">
+<section id="bookings" class="booking-section py-4">
   <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-10">
-        <div class="booking-form bg-dark text-white p-4 rounded">
-          <div class="row">
-            <div class="col-md-3">
-              <label>Check-in Date</label>
-              <input
-                type="date"
-                class="form-control"
-                [(ngModel)]="checkInDate"
-              />
-            </div>
-            <div class="col-md-3">
-              <label>Check-out Date</label>
-              <input
-                type="date"
-                class="form-control"
-                [(ngModel)]="checkOutDate"
-              />
-            </div>
-            <div class="col-md-2 d-flex align-items-end">
-              <button class="btn btn-primary w-100" (click)="search()">
-                Search
-              </button>
-            </div>
+    <div class="booking-form-container bg-danger p-5 rounded shadow-lg">
+      <h2 class="text-center text-white mb-4">Trova e prenota</h2>
+      <div class="booking-form bg-white text-dark p-4 rounded shadow">
+        <div class="row">
+          <div class="col-md-3">
+            <label class="form-label">Check-in</label>
+            <input
+              type="date"
+              class="form-control input-modern"
+              [(ngModel)]="checkInDate"
+            />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Check-out</label>
+            <input
+              type="date"
+              class="form-control input-modern"
+              [(ngModel)]="checkOutDate"
+            />
+          </div>
+          <div class="col-md-2 d-flex align-items-end">
+            <button class="btn btn-modern-booking w-100" (click)="search()">
+              Cerca
+            </button>
           </div>
         </div>
       </div>
