@@ -1,3 +1,75 @@
-.navbar {
-  box-shadow: 0 4px 2px -2px gray;
+/* Navbar generale */
+.custom-navbar {
+  background-color: #1a1a1a; /* Nero profondo come sfondo */
+  padding: 1.5rem 2rem; /* Navbar più alta e più spaziosa */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Ombra più morbida e grande */
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
+
+.navbar-brand {
+  color: #e63946; /* Colore rosso per il brand */
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar-brand:hover {
+  color: #f8b400; /* Hover sul brand con colore contrastante */
+}
+
+/* Stile degli elementi del menu */
+.nav-link {
+  color: #fff; /* Bianco per contrasto sul nero */
+  font-size: 1.2rem;
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+  transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+  border-bottom: 2px solid transparent; /* Bordo inferiore per un effetto moderno */
+}
+
+.nav-link:hover {
+  color: #e63946; /* Effetto hover rosso sui link */
+  border-bottom: 2px solid #e63946; /* Bordo rosso animato */
+}
+
+/* Link attivo */
+.nav-link.active {
+  color: #f8b400; /* Un colore giallo caldo per il link attivo */
+  border-bottom: 2px solid #f8b400; /* Bordi animati per il link attivo */
+}
+
+/* Stile per il pulsante del menu hamburger (mobile) */
+.navbar-toggler {
+  border: none; /* Rimozione del bordo */
+  background-color: #e63946; /* Rosso per il pulsante hamburger */
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255,255,255, 1%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Stile per quando la navbar viene scorsa verso il basso */
+.custom-navbar.scrolled {
+  background-color: #333; /* Navbar più scura quando si scorre */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5); /* Ombra più intensa */
+}
+
+/* Navbar responsive */
+@media (max-width: 992px) {
+  .custom-navbar {
+    padding: 1rem 1.5rem; /* Navbar meno alta sui dispositivi mobili */
+  }
+
+  .navbar-nav {
+    text-align: center;
+  }
+
+  .navbar-nav .nav-link {
+    font-size: 1.5rem; /* Link più grandi per il mobile */
+    padding: 0.75rem 0;
+  }
+}
+
