@@ -1,11 +1,54 @@
 .services-section h2 {
   font-size: 2.5rem;
+  color: #dc3545; /* Colore accattivante */
+  margin-bottom: 2rem; /* Maggiore margine inferiore */
+}
+
+.service-icon {
+  font-size: 3rem; /* Dimensione delle icone principali */
+  color: #dc3545; /* Colore delle icone */
+  margin-bottom: 1rem; /* Spazio sotto l'icona */
 }
 
 .card {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px; /* Angoli arrotondati per le card */
+  transition: transform 0.2s; /* Transizione per l'effetto hover */
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Leggera elevazione al passaggio del mouse */
+}
+
+.card-body {
+  padding: 2rem; /* Maggiore padding per il contenuto delle card */
 }
 
 .card-body h5 {
-  font-size: 1.2rem;
+  font-size: 1.5rem; /* Dimensione del titolo della card */
+  color: #333; /* Colore del titolo */
 }
+
+.card-body p {
+  font-size: 1rem; /* Dimensione del testo della descrizione */
+  color: #555; /* Colore del testo descrittivo */
+  margin-bottom: 1rem; /* Maggiore margine sotto i paragrafi */
+}
+
+.card-body .service-icon {
+  font-size: 2rem; /* Dimensione delle icone secondarie */
+}
+
+.service-card {
+  background-color: #f8f9fa; /* Colore di sfondo delle card secondarie */
+  border: 1px solid #dc3545; /* Bordo rosso */
+  border-radius: 10px; /* Angoli arrotondati */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombra leggera */
+  transition: transform 0.2s; /* Transizione per l'effetto hover */
+}
+
+.service-card:hover {
+  transform: translateY(-5px); /* Leggera elevazione al passaggio del mouse */
+}
+
+

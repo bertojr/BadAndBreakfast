@@ -1,5 +1,13 @@
+.mountain-photo-section {
+  overflow: hidden; /* Nascondi eventuali parti in eccesso */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombra leggera per un effetto di profondità */
+}
+
 .mountain-photo-section img {
   width: 100%;
   height: auto;
-  margin: 2rem 0;
+  max-height: 600px; /* Limita l'altezza massima dell'immagine */
+  object-fit: cover; /* Mantiene le proporzioni senza distorsione */
+  margin: 0 0; /* Ridotto margine verticale */
 }
+

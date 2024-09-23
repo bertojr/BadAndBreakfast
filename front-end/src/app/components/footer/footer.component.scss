@@ -1,5 +1,31 @@
 footer {
-  position: relative;
-  bottom: 0;
   width: 100%;
+  background: #1a1a1a; /* Sfondo scuro coerente con la navbar */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2); /* Ombra superiore per separazione visiva */
 }
+
+footer h5 {
+  color: #e63946; /* Colore del nome in rosso */
+  font-weight: bold;
+  margin: 0; /* Rimuove margine di default */
+}
+
+footer p {
+  margin: 0.5rem 0;
+}
+
+.social-links a {
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #f8b400; /* Colore giallo al passaggio del mouse */
+}
+
+.social-links i {
+  font-size: 1.5rem; /* Dimensione icone social */
+}
+
+
+
+
