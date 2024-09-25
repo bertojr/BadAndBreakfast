@@ -1,21 +1,23 @@
 footer {
-  width: 100%;
+  width: 100%; /* Larghezza del footer */
   background: #1a1a1a; /* Sfondo scuro coerente con la navbar */
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2); /* Ombra superiore per separazione visiva */
+  padding: 20px 0; /* Padding verticale per il footer */
+  color: white; /* Colore del testo del footer */
 }
 
 footer h5 {
   color: #e63946; /* Colore del nome in rosso */
-  font-weight: bold;
+  font-weight: bold; /* Grassetto per il nome */
   margin: 0; /* Rimuove margine di default */
 }
 
 footer p {
-  margin: 0.5rem 0;
+  margin: 0.5rem 0; /* Margini per i paragrafi */
 }
 
 .social-links a {
-  transition: color 0.3s ease;
+  transition: color 0.3s ease; /* Transizione per il colore */
 }
 
 .social-links a:hover {
@@ -23,8 +25,9 @@ footer p {
 }
 
 .social-links i {
-  font-size: 1.5rem; /* Dimensione icone social */
+  font-size: 1.5rem; /* Dimensione delle icone social */
 }
+
 
 
 

@@ -1,0 +1,116 @@
+/* Contenitore del background con un overlay scuro per il login */
+.login-background {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://www.tascapan.com/wp-content/uploads/2024/04/Aymavilles-castello-1000.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+/* Contenitore per il modulo di login, centrato verticalmente e orizzontalmente */
+.login-container {
+  background-color: rgba(0, 0, 0, 0.85); /* Maggiore opacità per migliorare il contrasto */
+  border-radius: 15px;
+  padding: 3rem;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: fadeInUp 0.8s ease;
+}
+
+/* Titolo con animazione */
+h1 {
+  text-align: center;
+  color: #f8b400;
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+/* Campi del modulo */
+.form-control {
+  background-color: #2a2a2a;
+  color: #fff;
+  border: 1px solid #f8b400;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #e63946;
+  box-shadow: 0 0 8px rgba(230, 57, 70, 0.8);
+}
+
+.form-control::placeholder {
+  color: #ccc; /* Cambia il placeholder in un colore più visibile */
+}
+
+/* Stile pulsante */
+.btn-primary {
+  background: linear-gradient(135deg, #e63946, #f8b400);
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-weight: bold;
+  color: #fff;
+  width: 100%;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+  background-color: #f8b400;
+}
+
+.register-link {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.register-link a {
+  color: #f8b400;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+  color: #e63946;
+}
+
+/* Animazione di apparizione */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animazione pulsante luce */
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px #f8b400, 0 0 20px #e63946, 0 0 30px #f8b400;
+  }
+  to {
+    text-shadow: 0 0 20px #e63946, 0 0 30px #f8b400, 0 0 40px #e63946;
+  }
+}
+
+
+
+
+
