@@ -1,37 +1,77 @@
-<div
-  class="hero text-center text-white d-flex align-items-center justify-content-center"
->
-  <div class="hero-text">
-    <h1>Le Nostre Camere</h1>
+<div class="hero-section">
+  <div class="text-right">
+    <h1>
+      <span class="title-bertos">LE</span><br />
+      <span class="title-apartments">CAMERE</span>
+    </h1>
+    <p *ngIf="rooms" class="hero-subtitle">
+      {{ rooms.length }} camere per ogni esigenza
+    </p>
+    <button class="btn btn-modern mt-3" (click)="scrollToBookings()">
+      Prenota Ora
+    </button>
+  </div>
+  <div class="image-container">
+    <img
+      src="https://files.oaiusercontent.com/file-ehTeZxZXGDnceTPPqZtbZLPP?se=2024-09-25T08%3A58%3A34Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3Da7fb81bf-6a99-4dbb-90f7-b4c453b99c3e.webp&sig=eTGqdxW0kLPop52w5CdnFWBckGKrqUHlyekJ6R2pFd0%3D"
+      alt="Camera più bella"
+    />
+  </div>
+</div>
+<app-booking-section></app-booking-section>
+<app-section-description></app-section-description>
+
+<div class="room-list">
+  <div
+    *ngFor="let room of rooms; let i = index"
+    class="room-card"
+    [ngClass]="{ alt: i % 2 === 1 }"
+  >
+    <!-- Testo e galleria immagini nello stesso div -->
+    <div
+      class="room-details"
+      [ngClass]="{ 'text-left': i % 2 === 0, 'text-right': i % 2 === 1 }"
+    >
+      <div class="room-info" [ngClass]="{ 'dark-bg': i % 2 === 1 }">
+        <h3>
+          Camera numero: <b>{{ room.roomNumber }}</b>
+        </h3>
+        <p>{{ room.description }}</p>
+      </div>
+    </div>
+
+    <div
+      class="room-gallery"
+      [ngClass]="{ 'gallery-left': i % 2 === 0, 'gallery-right': i % 2 === 1 }"
+    >
+      <ngb-carousel *ngIf="room.roomImages">
+        <ng-template
+          ngbSlide
+          *ngFor="let image of room.roomImages; let index = index"
+        >
+          <img
+            [src]="image.url"
+            [alt]="image.altText"
+            class="d-block w-100 gallery-image"
+          />
+        </ng-template>
+      </ngb-carousel>
+    </div>
   </div>
 </div>
 
-<section class="rooms py-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4 mb-4">
-        <div class="card" *ngFor="let room of rooms">
-          <img src="https://placehold.co/400" class="card-img-top" alt="" />
-          <div class="card-body">
-            <h5 class="card-title">{{ room.roomNumber }}</h5>
-            <p class="card-text">
-              {{ room.description }}
-            </p>
-          </div>
-        </div>
-      </div>
-      <!-- altre camere qui -->
-    </div>
-  </div>
-</section>
+<app-breakfast-section></app-breakfast-section>
 
-<section class="room-details py-5">
+<!-- Checkin Component (checkin.component.html) -->
+<section class="checkin-section">
   <div class="container">
-    <h2></h2>
-    <p>
-      Descrizione completa della stanza con tutte le caratteristiche: TV, Wi-Fi,
-      vista, ecc.
-    </p>
-    <!-- Contenuto delle schede -->
+    <h2 class="section-title text-center">
+      Condizioni di Arrivo nella Nostra Struttura
+    </h2>
+    <ul class="checkin-list">
+      <li><strong>Check-in:</strong> dalle 17.00 alle 19.00</li>
+      <li><strong>Check-out:</strong> entro le ore 11.00</li>
+      <li>Per orari diversi si prega di contattarci anticipatamente.</li>
+    </ul>
   </div>
 </section>

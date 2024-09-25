@@ -1,0 +1,111 @@
+/* Le Camere Component (le-camere.component.scss) */
+.le-camere-section {
+  padding: 6rem 0; /* Sezione più ampia */
+  background-color: #f9f9f9;
+  position: relative;
+  overflow: hidden;
+  width: 75%;
+  margin: 2rem auto;
+  border-radius: 2rem;
+}
+
+.section-title {
+  font-size: 3.5rem;
+  color: #dc3545;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
+.section-divider {
+  width: 100px;
+  height: 5px;
+  background-color: #dc3545;
+  margin: 0 auto 2rem auto;
+  border-radius: 50px;
+  opacity: 0.9;
+}
+
+.section-subtitle {
+  font-size: 1.8rem;
+  color: #555;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.section-description {
+  font-size: 1.3rem;
+  line-height: 2;
+  color: #333;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: justify;
+  padding: 0 1.5rem;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.section-description strong {
+  color: #dc3545;
+}
+
+.section-description em {
+  font-style: italic;
+  color: #777;
+}
+
+.highlight {
+  color: #333;
+  background-color: #dc3545;
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.highlight:hover {
+  background-color: #333;
+}
+
+.le-camere-section::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 300px;
+  height: 300px;
+  background-color: rgba(220, 53, 69, 0.2);
+  border-radius: 50%;
+  z-index: 0;
+  animation: floating 10s infinite ease-in-out;
+}
+
+.le-camere-section::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background-color: rgba(220, 53, 69, 0.2);
+  border-radius: 50%;
+  z-index: 0;
+  animation: floating 10s infinite ease-in-out reverse;
+}
+
+@keyframes floating {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(30px, -30px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+

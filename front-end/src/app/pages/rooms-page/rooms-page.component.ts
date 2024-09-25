@@ -13,6 +13,12 @@ export class RoomsPageComponent {
 
   constructor(private roomSvc: RoomService) {}
 
+  scrollToBookings(): void {
+    const bookingElement = document.getElementById('bookings');
+    if (bookingElement) {
+      bookingElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
   ngOnInit(): void {
     this.loadRooms();
   }

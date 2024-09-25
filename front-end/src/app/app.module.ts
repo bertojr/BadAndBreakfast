@@ -22,7 +22,9 @@ import { BookingSectionComponent } from './pages/home-page/booking-section/booki
 import { WelcomeSectionComponent } from './pages/home-page/welcome-section/welcome-section.component';
 import { ServicesSectionComponent } from './pages/home-page/services-section/services-section.component';
 import { MountainPhotoSectionComponent } from './pages/home-page/mountain-photo-section/mountain-photo-section.component';
-
+import { SectionDescriptionComponent } from './pages/rooms-page/section-description/section-description.component';
+import { BreakfastSectionComponent } from './pages/rooms-page/breakfast-section/breakfast-section.component';
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,8 +39,16 @@ import { MountainPhotoSectionComponent } from './pages/home-page/mountain-photo-
     WelcomeSectionComponent,
     ServicesSectionComponent,
     MountainPhotoSectionComponent,
+    SectionDescriptionComponent,
+    BreakfastSectionComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, AdminModule, FormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    AdminModule,
+    FormsModule,
+    NgbCarouselModule,
+  ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
