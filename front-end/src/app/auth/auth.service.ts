@@ -13,6 +13,7 @@ import { iUser } from '../models/i-user';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environments';
 import { iAuthResponse } from '../models/i-auth-response';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +37,7 @@ export class AuthService {
     tap((user) => (this.syncIsLoggedIn = user))
   );
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.restoreUser();
   }
 
@@ -57,6 +58,7 @@ export class AuthService {
 
         // salvo anche i suoi dati in localstorage
         localStorage.setItem('accessData', JSON.stringify(data));
+        this.router.navigate(['']);
       })
     );
   }
@@ -65,6 +67,7 @@ export class AuthService {
   logout(): void {
     this.authSubject.next(null);
     localStorage.removeItem('accessData');
+    this.router.navigate(['/auth/login']);
   }
 
   // metodo per effettuare l'auto logout alla scadenza del token
@@ -80,6 +83,7 @@ export class AuthService {
     const expMs = expDate.getTime() - new Date().getTime();
 
     setTimeout(() => this.logout(), expMs);
+    this.router.navigate(['/auth/login']);
   }
 
   // metodo per recuperare i dati di accesso

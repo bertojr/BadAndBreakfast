@@ -21,6 +21,7 @@
             aria-current="page"
             [routerLink]="['/']"
             routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
             >Home</a
           >
         </li>
@@ -32,13 +33,13 @@
             >Camere</a
           >
         </li>
-        <li *ngIf="user" class="nav-item">
+        <li *ngIf="isAdmin()" class="nav-item">
           <a
             class="nav-link admin-link"
             [routerLink]="['/admin']"
             routerLinkActive="active"
-            >Admin</a
-          >
+            >Admin
+          </a>
         </li>
       </ul>
 

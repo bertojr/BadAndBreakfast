@@ -4,6 +4,7 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { RoomsPageComponent } from './pages/rooms-page/rooms-page.component';
 import { ContactPageComponent } from './pages/contact-page/contact-page.component';
 import { BookingsComponent } from './pages/bookings/bookings.component';
+import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -18,6 +19,8 @@ const routes: Routes = [
     path: 'admin',
     loadChildren: () =>
       import('./admin/admin.module').then((m) => m.AdminModule),
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
   },
 ];
 

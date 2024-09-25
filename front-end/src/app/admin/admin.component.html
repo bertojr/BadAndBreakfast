@@ -1,1 +1,60 @@
-<p>Pagina admin</p>
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>Dashboard Amministrativa</h1>
+    <p>Benvenuto, qui puoi gestire tutti gli aspetti della piattaforma</p>
+  </div>
+
+  <div class="admin-grid">
+    <!-- Card Gestione Utenti -->
+    <div class="admin-card">
+      <div class="card-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <h3>Gestione Utenti</h3>
+      <p>Visualizza, aggiungi o modifica gli utenti della piattaforma.</p>
+      <button class="btn btn-primary" [routerLink]="['users']">Vai</button>
+    </div>
+
+    <!-- Card Gestione Servizi Aggiuntivi -->
+    <div class="admin-card">
+      <div class="card-icon">
+        <i class="fas fa-concierge-bell"></i>
+      </div>
+      <h3>Servizi Aggiuntivi</h3>
+      <p>Gestisci i servizi extra disponibili per i clienti.</p>
+      <button class="btn btn-primary" [routerLink]="['additional-services']">
+        Vai
+      </button>
+    </div>
+
+    <!-- Card Gestione Comodità -->
+    <div class="admin-card">
+      <div class="card-icon">
+        <i class="fas fa-couch"></i>
+      </div>
+      <h3>Comodità</h3>
+      <p>Configura e aggiorna le comodità offerte nelle camere.</p>
+      <button class="btn btn-primary" [routerLink]="['amenities']">Vai</button>
+    </div>
+
+    <!-- Card Gestione Ruoli -->
+    <div class="admin-card">
+      <div class="card-icon">
+        <i class="fas fa-user-shield"></i>
+      </div>
+      <h3>Gestione Ruoli</h3>
+      <p>Definisci e assegna i ruoli e i permessi agli utenti.</p>
+      <button class="btn btn-primary" [routerLink]="['roles']">Vai</button>
+    </div>
+
+    <!-- Card Gestione Camere -->
+    <div class="admin-card">
+      <div class="card-icon">
+        <i class="fas fa-bed"></i>
+      </div>
+      <h3>Gestione Camere</h3>
+      <p>Visualizza e modifica le informazioni sulle camere.</p>
+      <button class="btn btn-primary" [routerLink]="['rooms']">Vai</button>
+    </div>
+  </div>
+</div>

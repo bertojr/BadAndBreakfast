@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace back_end.DataModels
 {
@@ -44,6 +45,8 @@ namespace back_end.DataModels
         // propietà di navigazione
         public List<Review> Reviews { get; set; } = new List<Review>();
 		public List<Role> Roles { get; set; } = new List<Role>();
+
+        [JsonIgnore]
 		public List<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }

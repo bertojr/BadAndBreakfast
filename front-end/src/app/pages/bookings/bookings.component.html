@@ -1,67 +1,95 @@
-<div class="row">
-  <div class="col-md-2">
-    <label>Check-in Date</label>
-    <input type="date" class="form-control" [(ngModel)]="checkInDate" />
-  </div>
-  <div class="col-md-2">
-    <label>Check-out Date</label>
-    <input type="date" class="form-control" [(ngModel)]="checkOutDate" />
-  </div>
-  <div class="col-md-1">
-    <label>Ospiti</label>
-    <select class="form-select" [(ngModel)]="guests">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-    </select>
-  </div>
-  <div class="col-md-2 d-flex align-items-end">
-    <button class="btn btn-primary w-100" (click)="search()">Search</button>
-  </div>
-</div>
-
-<div *ngIf="checkInDate && checkOutDate">
-  <div *ngIf="!errorMessage; else noResults">
-    <ul>
-      <li *ngFor="let room of availableRooms">
-        {{ room.roomNumber }}
-        <br />
-        {{ room.capacity }}
-        <br />
-        {{ room.size }}
-        <br />
-        {{ room.price | currency }}
-        <button class="btn btn-primary" (click)="toogleSelection(room)">
-          {{ !isSelected(room.roomID) ? "Scegli" : "Annulla" }}
-        </button>
-      </li>
-    </ul>
-  </div>
-  <ng-template #noResults>
-    <p [innerHTML]="errorMessage"></p>
-  </ng-template>
-</div>
-
-<div class="details-box">
-  <div *ngIf="selectedRooms.length > 0; else noRoomsSelected">
-    <div *ngFor="let room of selectedRooms">
-      <h3>{{ room.roomNumber }}</h3>
-      <br />
-      <p>{{ checkInDateFormatted + "->" + checkOutDateFormatted }}</p>
+<!-- Contenitore per la barra di ricerca -->
+<div class="search-bar-container">
+  <div class="row search-bar">
+    <div class="col-md-3">
+      <label>Check-in Date</label>
+      <input type="date" class="form-control" [(ngModel)]="checkInDate" />
     </div>
-    <p>Numero di stanze | {{ getTotalRooms() }}</p>
-    <p>Prezzo giornaliero -> {{ getDailyPrice() }}</p>
-    <p>Numero di notti -> {{ getNumberOfNights() }}</p>
-    <p>Totale {{ getTotal() }}</p>
-
-    <button (click)="toBook()" class="btn btn-warning">Prenota ora</button>
+    <div class="col-md-3">
+      <label>Check-out Date</label>
+      <input type="date" class="form-control" [(ngModel)]="checkOutDate" />
+    </div>
+    <div class="col-md-3">
+      <label>Ospiti</label>
+      <select class="form-select" [(ngModel)]="guests">
+        <option value="1">1 Ospite</option>
+        <option value="2">2 Ospiti</option>
+        <option value="3">3 Ospiti</option>
+        <option value="4">4 Ospiti</option>
+      </select>
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+      <button class="btn btn-primary w-100 search-btn" (click)="search()">
+        Cerca
+      </button>
+    </div>
   </div>
-  <ng-template #noRoomsSelected>
-    <p>Numero di stanze | -</p>
-    <p>Prezzo giornaliero | -</p>
-    <p>Numero di notti | -</p>
-    <p>Totale | -</p>
-    <button disabled class="btn btn-warning">Prenota ora</button>
-  </ng-template>
+</div>
+
+<!-- Risultati delle camere -->
+<div class="room-results-container">
+  <div class="room-results" *ngIf="checkInDate && checkOutDate">
+    <div *ngIf="!errorMessage; else noResults">
+      <div class="room-card" *ngFor="let room of availableRooms">
+        <div class="room-image" *ngIf="room.roomImages">
+          <img [src]="room.roomImages[0].url" alt="Room Image" />
+        </div>
+        <div class="room-details">
+          <h3>Camera {{ room.roomNumber }}</h3>
+          <p>
+            <i class="fas fa-user-friends"></i> Capienza:
+            {{ room.capacity }} persone
+          </p>
+          <p>
+            <i class="fas fa-expand-arrows-alt"></i> Grandezza:
+            {{ room.size }} m²
+          </p>
+          <div class="room-price">
+            <p class="total-price">
+              <strong>Prezzo totale:</strong>
+              {{ getTotal() | currency : "EUR" }}
+            </p>
+            <p class="small-price">
+              <strong>Prezzo per notte:</strong>
+              {{ getDailyPrice() | currency : "EUR" }}
+            </p>
+          </div>
+          <button class="btn btn-success" (click)="toogleSelection(room)">
+            {{ !isSelected(room.roomID) ? "Scegli" : "Annulla" }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <ng-template #noResults>
+      <p [innerHTML]="errorMessage"></p>
+    </ng-template>
+  </div>
+
+  <!-- Dettagli delle camere selezionate -->
+  <div class="selected-room-details">
+    <div *ngIf="selectedRooms.length > 0; else noRoomsSelected">
+      <div *ngFor="let room of selectedRooms" class="selected-room">
+        <h3>Camera {{ room.roomNumber }}</h3>
+        <p>{{ checkInDateFormatted }} -> {{ checkOutDateFormatted }}</p>
+      </div>
+      <p><strong>Numero di stanze:</strong> {{ getTotalRooms() }}</p>
+      <p>
+        <strong>Prezzo giornaliero:</strong>
+        {{ getDailyPrice() | currency : "EUR" }}
+      </p>
+      <p><strong>Numero di notti:</strong> {{ getNumberOfNights() }}</p>
+      <p>
+        <strong>Totale:</strong>
+        {{ getTotal() | currency : "EUR" }}
+      </p>
+      <button (click)="toBook()" class="btn btn-warning">Prenota ora</button>
+    </div>
+    <ng-template #noRoomsSelected>
+      <p><strong>Numero di stanze:</strong> -</p>
+      <p><strong>Prezzo giornaliero:</strong> -</p>
+      <p><strong>Numero di notti:</strong> -</p>
+      <p><strong>Totale:</strong> -</p>
+      <button disabled class="btn btn-warning">Prenota ora</button>
+    </ng-template>
+  </div>
 </div>

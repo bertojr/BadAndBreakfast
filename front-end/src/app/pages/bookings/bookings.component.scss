@@ -1,0 +1,163 @@
+/* Contenitore per la barra di ricerca */
+.search-bar-container {
+  background: linear-gradient(135deg, rgba(30, 30, 30, 0.9), rgba(50, 50, 50, 0.9));
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  margin-bottom: 40px;
+  animation: fadeIn 1s ease;
+}
+
+/* Contenitore per i risultati delle camere */
+.room-results-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Stile per la visualizzazione delle camere disponibili */
+.room-results {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  margin-top: 30px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Stile per ogni camera */
+.room-card {
+  background-color: rgba(60, 60, 60, 0.9);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  padding: 30px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  align-items: center;
+  width: 700px;
+  margin-bottom: 2rem;
+  margin-left: 5rem;
+  cursor: pointer; /* Cambia il cursore su hover */
+}
+
+.room-card:hover {
+  transform: translateY(-5px); /* Effetto sollevamento */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8); /* Ombra più intensa al passaggio del mouse */
+}
+
+.room-image img {
+  width: 240px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.room-details {
+  flex-grow: 1;
+  text-align: left; /* Testo a sinistra per una lettura migliore */
+}
+
+.room-details h3 {
+  color: #f8b400;
+  margin-bottom: 10px;
+  font-size: 1.8rem; /* Maggiore dimensione per titolo */
+}
+
+.room-details p {
+  color: #ccc;
+  margin: 5px 0;
+}
+
+/* Stile per la sezione dei dettagli delle camere selezionate */
+.selected-room-details {
+  position: fixed; /* Posizionamento fisso sulla destra */
+  top: 20rem; /* Distanza dal top della pagina */
+  right: 10rem; /* Posizione a destra */
+  width: 320px; /* Larghezza fissa */
+  height: 300px; /* Altezza fissa (puoi modificarla come preferisci) */
+  background-color: rgba(50, 50, 50, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  animation: slideInFromRight 1s ease;
+  overflow-y: auto; /* Permette lo scorrimento verticale */
+}
+
+.selected-room {
+  margin-bottom: 15px;
+}
+
+.selected-room h3 {
+  color: #f8b400;
+}
+
+.selected-room p {
+  color: #ccc;
+  font-weight: bold;
+}
+
+/* Aggiunta di stili per le barre di scorrimento */
+.selected-room-details::-webkit-scrollbar {
+  width: 8px; /* Larghezza della barra di scorrimento */
+}
+
+.selected-room-details::-webkit-scrollbar-thumb {
+  background: #f8b400; /* Colore della barra di scorrimento */
+  border-radius: 10px; /* Bordo arrotondato per la barra di scorrimento */
+}
+
+.selected-room-details::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1); /* Colore di sfondo della barra di scorrimento */
+}
+
+/* Prezzo totale e per notte */
+.room-price {
+  margin-top: 15px;
+}
+
+.room-price p {
+  color: #fff;
+}
+
+.room-price .total-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.room-price .small-price {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+/* Animazioni */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Pulsanti */
+.btn {
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Transizioni dolci */
+}
+
+.btn:hover {
+  background-color: #007bff; /* Colore di sfondo al passaggio del mouse */
+  transform: scale(1.05); /* Effetto zoom al passaggio del mouse */
+}
