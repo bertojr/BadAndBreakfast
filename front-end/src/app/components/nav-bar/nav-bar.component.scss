@@ -57,6 +57,54 @@
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5); /* Ombra più intensa */
 }
 
+/* Nuovi stili per il login/logout e nome utente */
+.user-area {
+  display: flex;
+  align-items: center; /* Allineare verticalmente */
+  margin-left: auto; /* Allinea a destra */
+}
+
+.user-info {
+  text-align: center; /* Allinea il testo al centro */
+  margin-left: 1rem; /* Spaziatura a sinistra */
+}
+
+.user-name {
+  color: #fff; /* Colore del nome utente */
+  margin-bottom: 0.5rem; /* Spaziatura sotto il nome utente */
+}
+
+/* Miglioramenti ai pulsanti di login e logout */
+.login-button {
+  background-color: #f8b400; /* Colore giallo per il login */
+  border-radius: 5px; /* Bordo arrotondato */
+  padding: 0.5rem 1rem; /* Padding interno */
+  transition: background-color 0.3s ease-in-out, transform 0.2s;
+  font-weight: bold; /* Testo in grassetto */
+  text-decoration: none; /* Rimuove la sottolineatura */
+}
+
+.login-button:hover {
+  background-color: #e63946; /* Hover rosso */
+  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+}
+
+.logout-button {
+  background-color: #e63946; /* Rosso per il pulsante di logout */
+  color: #fff; /* Colore bianco per il testo */
+  border: none; /* Rimuove il bordo */
+  border-radius: 5px; /* Bordo arrotondato */
+  padding: 0.5rem 1rem; /* Padding interno */
+  cursor: pointer; /* Cambia il cursore */
+  transition: background-color 0.3s ease-in-out, transform 0.2s;
+  font-weight: bold; /* Testo in grassetto */
+}
+
+.logout-button:hover {
+  background-color: #f8b400; /* Hover giallo per il pulsante di logout */
+  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+}
+
 /* Navbar responsive */
 @media (max-width: 992px) {
   .custom-navbar {
@@ -72,4 +120,9 @@
     padding: 0.75rem 0;
   }
 }
+
+
+
+
+
 

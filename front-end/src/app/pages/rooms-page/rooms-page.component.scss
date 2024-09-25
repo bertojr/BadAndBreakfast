@@ -226,21 +226,51 @@ h1 {
 
 
 
-/* Checkin Component (checkin.component.scss) */
+/* Sezione di checkin */
 .checkin-section {
-  padding: 3rem 0;
-  background-color: #f9f9f9;
+  padding: 4rem 0;
+  background-color: #f9f9f9; /* Puoi cambiare in un grigio chiaro se necessario */
+  border-top: 4px solid red; /* Aggiunta di una linea rossa in alto */
+}
+
+.section-title {
+  color: black; /* Colore del titolo */
+  margin-bottom: 2rem; /* Spaziatura inferiore */
+  font-size: 2.5rem; /* Dimensione maggiore per il titolo */
+  text-transform: uppercase; /* Testo in maiuscolo per un effetto moderno */
 }
 
 .checkin-list {
-  font-size: 1.2rem;
+  font-size: 1.4rem; /* Dimensione font leggermente aumentata */
   color: #333;
   max-width: 600px;
   margin: 0 auto;
+  list-style-type: none; /* Rimuovi i puntini dalla lista */
+  padding: 0;
 }
 
 .checkin-list li {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem; /* Spaziatura aumentata */
+  padding: 1rem; /* Aggiunto padding per migliorare l’aspetto */
+  border-left: 4px solid red; /* Linea rossa a sinistra per ogni elemento */
+  background-color: #fff; /* Sfondo bianco per i singoli elementi */
+  transition: background-color 0.3s; /* Transizione per un effetto al passaggio del mouse */
 }
+
+.checkin-list li:hover {
+  background-color: #f1f1f1; /* Colore di sfondo al passaggio del mouse */
+}
+
+.highlight {
+  color: red; /* Colore rosso per i tempi */
+  font-weight: bold; /* Grassetto per evidenziare */
+}
+
+.note {
+  font-style: italic; /* Corsivo per il messaggio di contatto */
+  color: #666; /* Colore grigio per differenziare */
+  margin-top: 1rem; /* Spaziatura superiore */
+}
+
 
 
