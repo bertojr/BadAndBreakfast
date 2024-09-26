@@ -2,6 +2,7 @@ import { iRoom } from './../../models/i-room';
 import { Component } from '@angular/core';
 import { BookingService } from '../../services/booking.service';
 import { iBooking } from '../../models/i-booking';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bookings',
@@ -17,7 +18,7 @@ export class BookingsComponent {
   availableRooms!: iRoom[];
   selectedRooms: iRoom[] = [];
   guests: number = 2;
-  constructor(private bookingSvc: BookingService) {}
+  constructor(private bookingSvc: BookingService, private router: Router) {}
 
   ngOnInit() {
     this.updateDates();
@@ -110,5 +111,7 @@ export class BookingsComponent {
       },
       error: (error) => (this.errorMessage = error.message),
     });
+
+    this.router.navigate(['/']);
   }
 }
